@@ -107,107 +107,96 @@ export const useMagicalSounds = () => {
         const ctx = audioContextRef.current;
         const now = ctx.currentTime;
 
-        // Evolving Composition Logic
-        // Goal: Create a 30s journey that doesn't feel like a loop.
-        // We use the 'indices' as a DNA source but interpret them differently over time.
-
-        const bpm = 120;
+        // DANCE MODE: 130 BPM, High Energy, Dense
+        const bpm = 130;
         const secondsPerBeat = 60 / bpm;
         const sixteenthNoteTime = secondsPerBeat / 4;
         const totalSteps = Math.floor(durationSeconds / sixteenthNoteTime);
 
+        // Pre-calculate a consistent "Theme" from the history to use as the main loop
+        // If history is small, repeat it. If large, take a slice.
+        const loopLength = 32; // 2 bars of 16th notes
+        const melodyPattern = indices.slice(0, 8); // Use first few minerals for core identity
+
         for (let step = 0; step < totalSteps; step++) {
-            // Rhythmic Progression:
-            // 0-10s: Sparse (Introduction)
-            // 10-20s: Groove (Body)
-            // 20-30s: Full/Melodic (Finale)
-
-            const timeProgress = step / totalSteps;
-            const isIntroduction = timeProgress < 0.33;
-            const isFinale = timeProgress > 0.66;
-            const isBody = !isIntroduction && !isFinale;
-
-            // Pattern Logic:
-            // We use a "Modulo walker" to determine play triggers
-            const baseRhythm = (step % 2 === 0); // Basic 8th note grid
-
-            let shouldPlay = baseRhythm;
-
-            if (isIntroduction) {
-                // Sparse: Play mostly on beats 1 and 3
-                shouldPlay = (step % 8 === 0) || (step % 8 === 3);
-            } else if (isBody) {
-                // Groove: Add some syncopation
-                shouldPlay = baseRhythm || (step % 16 === 14);
-            } else if (isFinale) {
-                // Full: busier
-                shouldPlay = true; // Almost constant stream? Maybe too much.
-                // Let's stick to 8ths but add 16th note runs
-                if (step % 4 === 1) shouldPlay = true;
-            }
-
-            // Pseudo-random mute to create holes/breathing space
-            // Seeded by the current step index to be deterministic for this playthrough but complex
-            if (Math.sin(step) > 0.8) shouldPlay = false;
-
-            if (!shouldPlay) continue;
-
             const startTime = now + (step * sixteenthNoteTime);
 
-            // Melody Logic:
-            // Walk through our history indices.
-            const indexWalk = (step + Math.floor(step / 16)) % indices.length;
-            const baseHistoryIndex = indices[indexWalk];
+            // 1. THE BEAT (Kick Drum Simulation)
+            // Play on every quarter note (step 0, 4, 8, 12...)
+            if (step % 4 === 0) {
+                // Use a very low frequency note from our seeds as a kick
+                // We'll use index 0 or 1 (Low C)
+                const kickSeed = SOUND_SEEDS[0];
 
-            // Octave/Pitch variation: 
-            // Intro: Low/Mid
-            // Body: Mid
-            // Finale: Mid/High
-
-            let scaleOffset = 0;
-            if (isIntroduction && Math.random() > 0.5) scaleOffset = -5; // Lower 
-            if (isFinale && Math.random() > 0.6) scaleOffset = 5; // Higher
-
-            let scaleIndex = Math.abs(baseHistoryIndex + (step % 5)) % SOUND_SEEDS.length;
-            scaleIndex = Math.max(0, Math.min(scaleIndex + scaleOffset, SOUND_SEEDS.length - 1));
-
-            const seed = SOUND_SEEDS[scaleIndex];
-
-            // Dynamic Velocity (Volume)
-            let volume = 0.04;
-            if (step % 16 === 0) volume = 0.1; // Strong downbeat
-            else if (step % 4 === 0) volume = 0.06; // Beat
-
-            // Fade out at the very end (last 2 seconds)
-            if (timeProgress > 0.93) {
-                volume *= (1 - ((timeProgress - 0.93) * 15));
-                if (volume < 0) volume = 0;
+                // Custom trigger for punchier sound? 
+                // We'll stick to triggerSound but give it high volume and short duration via the existing envelope
+                triggerSound(ctx, kickSeed, startTime, 0.15);
             }
 
-            triggerSound(ctx, seed, startTime, volume);
+            // 2. THE BASS (Driving 8th notes)
+            // Play on off-beats too (0, 2, 4, 6...)
+            // If it's a kick step, we layer it.
+            if (step % 2 === 0) {
+                // Pick a low note based on history to keep it unique to user
+                // Map to lower range of sound seeds (e.g., indices 0-10)
+                const bassNoteIndex = indices[(step / 2) % indices.length];
+                const bassSeedIndex = Math.abs(bassNoteIndex) % 10; // Keep it low
+                const bassSeed = SOUND_SEEDS[bassSeedIndex];
 
-            // Harmony Layer (Counterpoint)
-            // Intro: None
-            // Body: Simple 5ths
-            // Finale: 3rds and 5ths
-            if (!isIntroduction && (step % 8 === 0)) {
+                // Sidechain feel: If it's a kick step (on beat), play quieter bass
+                // If it's off-beat, play louder bass
+                const isKickStep = step % 4 === 0;
+                const bassVolume = isKickStep ? 0.03 : 0.08;
 
-                let harmonyInterval = 4; // roughly a 5th in pentatonic scale
-                if (isFinale && step % 16 === 0) harmonyInterval = 2; // a 3rd
-
-                // Pick a seed relative to current melody note
-                let harmonyIndex = Math.max(0, scaleIndex - harmonyInterval);
-                const harmonySeed = SOUND_SEEDS[harmonyIndex];
-
-                triggerSound(ctx, harmonySeed, startTime, 0.04);
+                triggerSound(ctx, bassSeed, startTime, bassVolume);
             }
 
-            // Sparkle / Texture Layer
-            // Rare random high pings
-            if (Math.random() > 0.92) {
-                const sparkleIndex = (scaleIndex + 10) % SOUND_SEEDS.length;
-                const sparkleSeed = SOUND_SEEDS[sparkleIndex];
-                triggerSound(ctx, sparkleSeed, startTime + (sixteenthNoteTime * 0.5), 0.02);
+            // 3. THE HI-HAT / PERCUSSION (16th notes)
+            // Playing on the "and" and "e" and "a"
+            // specifically highlight the off-beats (hi-hats)
+            if (step % 4 === 2) {
+                // Open Hi-hat feel: High frequency note
+                const hatSeed = SOUND_SEEDS[45]; // High note
+                triggerSound(ctx, hatSeed, startTime, 0.03);
+            }
+            if (step % 2 !== 0) {
+                // Shaker feel: Very high, very quiet
+                const shakerSeed = SOUND_SEEDS[48];
+                triggerSound(ctx, shakerSeed, startTime, 0.02);
+            }
+
+            // 4. THE MELODY (Main Lead)
+            // Dance music has repetitive hooks.
+            // We'll Create a 2-bar loop (32 steps) that repeats but evolves slightly
+            const loopStep = step % loopLength;
+
+            // Syncopated pattern: 3-3-2 or similar
+            // Let's determine play status based on the loop step to create a rhythm
+            // e.g. Play on 0, 3, 6, 9, 12, 14...
+            const pattern = [true, false, false, true, false, false, true, false, false, true, false, false, true, false, true, false]; // 16 step pattern approximation
+            const shouldPlayMelody = pattern[loopStep % 16];
+
+            if (shouldPlayMelody) {
+                // Pick note from history
+                // We use the full history array to give flavor
+                const noteIndex = indices[step % indices.length];
+
+                // Transpose to mid-high range for visibility
+                let melodySeedIndex = (Math.abs(noteIndex) % 20) + 15; // Range 15-35
+
+                // Variation: Every 4th bar, go higher
+                if (Math.floor(step / 64) % 2 === 1) melodySeedIndex += 5;
+
+                const melodySeed = SOUND_SEEDS[melodySeedIndex];
+                triggerSound(ctx, melodySeed, startTime, 0.07);
+            }
+
+            // 5. THE FLOURISH (End of phrase fills)
+            if (step % 64 > 56) {
+                // Rising roll at end of 4 bars
+                const rollIndex = 40 + (step % 8);
+                const rollSeed = SOUND_SEEDS[rollIndex];
+                triggerSound(ctx, rollSeed, startTime, 0.04);
             }
         }
     }, []);
