@@ -107,80 +107,89 @@ export const useMagicalSounds = () => {
         const ctx = audioContextRef.current;
         const now = ctx.currentTime;
 
-        // WALTZ MODE: "Tennessee Waltz" Style
-        // Tempo: ~96 BPM (Moderate, swinging)
-        // Time Signature: 3/4 (ONE - two - three)
-
+        // WALTZ MODE: 96 BPM 3/4 Time
         const bpm = 96;
         const secondsPerBeat = 60 / bpm;
         const sixteenthNoteTime = secondsPerBeat / 4;
         const totalSteps = Math.floor(durationSeconds / sixteenthNoteTime);
-
-        // A bar of 3/4 has 3 beats = 12 sixteenth notes.
         const notesPerBar = 12;
+
+        // 10 Distinct Melody Themes similar to "Tennessee Waltz" style
+        // Each defines a "Personality" for the composition
+        const THEMES = [
+            { name: "The Storyteller", octave: 0, probability: 0.8, jumpSize: 1, description: "Simple, step-wise, lyrical" },
+            { name: "The Dancer", octave: 1, probability: 0.9, jumpSize: 4, description: "Jumpy, energetic, arpeggios" },
+            { name: "The Dreamer", octave: 1, probability: 0.5, jumpSize: 2, description: "Sparse, high-pitched, floating" },
+            { name: "The River", octave: 0, probability: 1.0, jumpSize: 1, description: "Continuous 8th notes, flowing" },
+            { name: "The Mountain", octave: -1, probability: 0.7, jumpSize: 5, description: "Grand, wide intervals, deeper" },
+            { name: "The Breeze", octave: 2, probability: 0.6, jumpSize: 3, description: "Very high, delicate, airy" },
+            { name: "The Memory", octave: 0, probability: 0.6, jumpSize: 0, description: "Repetitive, nostalgic, lingering notes" },
+            { name: "The Heartbeat", octave: 0, probability: 0.75, jumpSize: 2, description: "Focus on downbeats, rhythmic" },
+            { name: "The Sunset", octave: 0, probability: 0.85, jumpSize: 3, description: "Warm, rich, harmonious moves" },
+            { name: "The Star", octave: 2, probability: 0.4, jumpSize: 6, description: "sparkling, distant, rare notes" }
+        ];
+
+        // Randomly select one theme for this 30s journey
+        const selectedTheme = THEMES[Math.floor(Math.random() * THEMES.length)];
 
         for (let step = 0; step < totalSteps; step++) {
             const startTime = now + (step * sixteenthNoteTime);
-
-            // Determine position in the bar (0 to 11)
             const barStep = step % notesPerBar;
 
-            // 1. THE FOUNDATION (Bass & Harmony - Boom-Ching-Ching)
-            // Beat 1 (Step 0): Strong Bass Note
+            // --- FOUNDATION (Consistent across themes for Waltz feel) ---
+
+            // Bass on Beat 1 (Warm, grounding)
             if (barStep === 0) {
-                // Root note from history (Lower octave)
                 const bassIndex = indices[Math.floor(step / notesPerBar) % indices.length];
-                const bassSeed = SOUND_SEEDS[Math.abs(bassIndex) % 10]; // Keep it low
-                triggerSound(ctx, bassSeed, startTime, 0.12); // Stronger, warmer
+                const bassSeed = SOUND_SEEDS[Math.abs(bassIndex) % 10];
+                triggerSound(ctx, bassSeed, startTime, 0.12);
             }
 
-            // Beat 2 (Step 4) & Beat 3 (Step 8): Strummed Chords
+            // Strummed Harmony on Beat 2 & 3
             if (barStep === 4 || barStep === 8) {
-                // Harmony note (Mid range)
-                // We strum 2 notes slightly offset? Just one for now to keep it clean but distinctive
                 const chordIndex = indices[(Math.floor(step / notesPerBar) + 1) % indices.length];
-                const chordSeed = SOUND_SEEDS[(Math.abs(chordIndex) % 15) + 10]; // Mid range
-
-                // Softer than bass
+                const chordSeed = SOUND_SEEDS[(Math.abs(chordIndex) % 15) + 10];
                 triggerSound(ctx, chordSeed, startTime, 0.05);
-
-                // Arpeggiate slightly? Add a tiny delay for a second note
-                // const chordSeed2 = SOUND_SEEDS[(Math.abs(chordIndex) % 15) + 14]; // A third/fifth up
-                // triggerSound(ctx, chordSeed2, startTime + 0.03, 0.04);
             }
 
-            // 2. THE MELODY (Lyrical, Flowing)
-            // In a waltz, melody often moves on beats or flows in 8th notes.
-            // Let's create a flowing 8th note pattern (steps 0, 2, 4, 6, 8, 10)
-            // But vary it so it's not robotic.
+            // --- MELODY (Driven by Selected Theme) ---
+            // Most waltz melodies move on 8th notes (every 2 steps)
+            const isMelodySlot = step % 2 === 0;
 
-            const isEighthNote = step % 2 === 0;
+            if (isMelodySlot) {
+                // algorithmic "composition" based on theme parameters
 
-            if (isEighthNote) {
-                // Flowing probability: sine wave modulation
-                const shouldPlay = (Math.sin(step * 0.5) > -0.5);
+                // 1. Should we play a note here? (Rhythm)
+                // Use a deterministic noise function based on step + Theme probability
+                const rhythmNoise = Math.sin(step * 0.8 + selectedTheme.jumpSize); // pseudo-random walk
+                const shouldPlay = (rhythmNoise + 1) / 2 < selectedTheme.probability;
 
                 if (shouldPlay) {
-                    // Pick note based on step to create a melody that "travels"
-                    const melodyHistoryIndex = (step + Math.floor(step / 12)) % indices.length;
-                    const rawIndex = indices[melodyHistoryIndex];
+                    // 2. Which note? (Pitch)
+                    // Walk through user history
+                    const indexWalk = (step + Math.floor(step / 16)) % indices.length;
+                    const rawIndex = indices[indexWalk];
 
-                    // Transpose to a singing range (High)
-                    // Add some sine wave motion to pitch to simulate phrasing arc
-                    const pitchArch = Math.floor(Math.sin(step / 20) * 5);
+                    // Apply Theme Octave
+                    // Base range is roughly index 20-40 (Mid-High).
+                    // Theme.octave shifts this by 5 indices (~an octave in pentatonic)
+                    let baseSeedIndex = (Math.abs(rawIndex) % 20) + 15 + (selectedTheme.octave * 5);
 
-                    let melodySeedIndex = (Math.abs(rawIndex) % 20) + 20 + pitchArch;
+                    // Apply Theme "Jumpiness" (Intervals)
+                    // If jumpSize is high, we modulate the index more aggressively based on step
+                    const intervalMod = (step % 2 === 0 ? 1 : -1) * (step % selectedTheme.jumpSize);
+                    let finalSeedIndex = baseSeedIndex + intervalMod;
 
-                    // Adjust to scale limits
-                    if (melodySeedIndex >= SOUND_SEEDS.length) melodySeedIndex = SOUND_SEEDS.length - 1;
-                    if (melodySeedIndex < 0) melodySeedIndex = 0;
+                    // Clamp to valid range
+                    finalSeedIndex = Math.max(0, Math.min(finalSeedIndex, SOUND_SEEDS.length - 1));
 
-                    const melodySeed = SOUND_SEEDS[melodySeedIndex];
+                    const melodySeed = SOUND_SEEDS[finalSeedIndex];
 
-                    // Dynamics: Beat 1 is loudest, others softer (phrasing)
-                    let melVolume = 0.06;
-                    if (barStep === 0) melVolume = 0.09;
-                    if (barStep >= 10) melVolume = 0.04; // End of bar fade
+                    // Dynamics (Phrasing)
+                    // Arc volume over the bar (Loudest at start, quiet at end)
+                    let melVolume = 0.07;
+                    if (barStep === 0) melVolume = 0.1;
+                    if (barStep >= 10) melVolume = 0.04;
 
                     triggerSound(ctx, melodySeed, startTime, melVolume);
                 }
