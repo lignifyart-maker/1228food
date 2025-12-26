@@ -120,7 +120,7 @@ export default function Home() {
           <div className="w-6 h-6 rounded bg-white flex items-center justify-center">
             <Sparkles className="w-4 h-4 text-black" />
           </div>
-          <span className="font-black tracking-tight text-sm">LITHOS</span>
+          <h1 className="font-black tracking-tight text-sm">LITHOS</h1>
         </div>
         <div className="flex items-center gap-3">
           <Github className="w-4 h-4 text-zinc-600" />
