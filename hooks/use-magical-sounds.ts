@@ -74,6 +74,12 @@ export const useMagicalSounds = () => {
         filter.frequency.exponentialRampToValueAtTime(3000, startTime + 0.05); // Open up
         filter.frequency.exponentialRampToValueAtTime(500, startTime + 0.3); // Close down
 
+        // Filter envelope variation
+        // Some notes can be "brighter" randomly
+        if (Math.random() > 0.7) {
+            filter.frequency.exponentialRampToValueAtTime(4000, startTime + 0.05);
+        }
+
         osc.connect(filter);
         filter.connect(masterGain);
 
@@ -101,70 +107,107 @@ export const useMagicalSounds = () => {
         const ctx = audioContextRef.current;
         const now = ctx.currentTime;
 
-        // Upbeat Composition Logic (120 BPM)
-        // We will generate a sequence that fills the ENTIRE duration.
+        // Evolving Composition Logic
+        // Goal: Create a 30s journey that doesn't feel like a loop.
+        // We use the 'indices' as a DNA source but interpret them differently over time.
+
         const bpm = 120;
         const secondsPerBeat = 60 / bpm;
         const sixteenthNoteTime = secondsPerBeat / 4;
-
-        // Calculate total 16th note steps for the full duration
         const totalSteps = Math.floor(durationSeconds / sixteenthNoteTime);
 
-        // Grid-based composition using the available "indices" (history) as the note palette
         for (let step = 0; step < totalSteps; step++) {
-            // Determine rhythm: Play on 8th notes (every 2 steps) to keep it driving but not chaotic
-            // Add some syncopation: Skip some notes or play on 16ths occasionally?
-            // Let's stick to a solid 8th note Arpeggio feel: 0, 2, 4, 6...
-            if (step % 2 !== 0) continue;
+            // Rhythmic Progression:
+            // 0-10s: Sparse (Introduction)
+            // 10-20s: Groove (Body)
+            // 20-30s: Full/Melodic (Finale)
 
-            // Which note from history to play?
-            // "The more minerals drawn, the richer the effect"
-            // We cycle through the history indices. 
-            // If history is short [A, B], it goes A, B, A, B...
-            // If history is long [A...Z], it goes A...Z...
-            // To add variety to the repetition, we can offset slightly or ping-pong if we wanted,
-            // but a direct cycle ensures all "memories" are played in loop.
+            const timeProgress = step / totalSteps;
+            const isIntroduction = timeProgress < 0.33;
+            const isFinale = timeProgress > 0.66;
+            const isBody = !isIntroduction && !isFinale;
 
-            // To make it feel "edited" and not just a simple loop, we can add a 'Melodic Walker' pattern
-            // straightforward cycle for the main melody:
-            const indexInHistory = (step / 2) % indices.length;
-            const seedIndex = indices[indexInHistory];
-            const seed = SOUND_SEEDS[Math.abs(seedIndex) % SOUND_SEEDS.length];
+            // Pattern Logic:
+            // We use a "Modulo walker" to determine play triggers
+            const baseRhythm = (step % 2 === 0); // Basic 8th note grid
+
+            let shouldPlay = baseRhythm;
+
+            if (isIntroduction) {
+                // Sparse: Play mostly on beats 1 and 3
+                shouldPlay = (step % 8 === 0) || (step % 8 === 3);
+            } else if (isBody) {
+                // Groove: Add some syncopation
+                shouldPlay = baseRhythm || (step % 16 === 14);
+            } else if (isFinale) {
+                // Full: busier
+                shouldPlay = true; // Almost constant stream? Maybe too much.
+                // Let's stick to 8ths but add 16th note runs
+                if (step % 4 === 1) shouldPlay = true;
+            }
+
+            // Pseudo-random mute to create holes/breathing space
+            // Seeded by the current step index to be deterministic for this playthrough but complex
+            if (Math.sin(step) > 0.8) shouldPlay = false;
+
+            if (!shouldPlay) continue;
 
             const startTime = now + (step * sixteenthNoteTime);
 
-            // Accent logic: Downbeats (every 4th step = every quarter note) are louder
-            const isDownbeat = step % 4 === 0;
-            // Bar start (every 16 steps = 4 beats) is strongest
-            const isBarStart = step % 16 === 0;
+            // Melody Logic:
+            // Walk through our history indices.
+            const indexWalk = (step + Math.floor(step / 16)) % indices.length;
+            const baseHistoryIndex = indices[indexWalk];
 
+            // Octave/Pitch variation: 
+            // Intro: Low/Mid
+            // Body: Mid
+            // Finale: Mid/High
+
+            let scaleOffset = 0;
+            if (isIntroduction && Math.random() > 0.5) scaleOffset = -5; // Lower 
+            if (isFinale && Math.random() > 0.6) scaleOffset = 5; // Higher
+
+            let scaleIndex = Math.abs(baseHistoryIndex + (step % 5)) % SOUND_SEEDS.length;
+            scaleIndex = Math.max(0, Math.min(scaleIndex + scaleOffset, SOUND_SEEDS.length - 1));
+
+            const seed = SOUND_SEEDS[scaleIndex];
+
+            // Dynamic Velocity (Volume)
             let volume = 0.04;
-            if (isBarStart) volume = 0.1;
-            else if (isDownbeat) volume = 0.06;
+            if (step % 16 === 0) volume = 0.1; // Strong downbeat
+            else if (step % 4 === 0) volume = 0.06; // Beat
+
+            // Fade out at the very end (last 2 seconds)
+            if (timeProgress > 0.93) {
+                volume *= (1 - ((timeProgress - 0.93) * 15));
+                if (volume < 0) volume = 0;
+            }
 
             triggerSound(ctx, seed, startTime, volume);
 
-            // Harmonics / Richness Layer
-            // If we have enough history, let's use other notes for harmony!
-            // If indices.length > 3, we can add a bass layer or counter-melody.
-            if (isDownbeat && indices.length > 3) {
-                // Pick a note from further back in the history for harmony
-                // E.g., the previous note, or 3 steps back
-                const harmonyHistoryIndex = (indexInHistory + 2) % indices.length;
-                const harmonySeedIndex = indices[harmonyHistoryIndex];
-                const harmonySeed = SOUND_SEEDS[Math.abs(harmonySeedIndex) % SOUND_SEEDS.length];
+            // Harmony Layer (Counterpoint)
+            // Intro: None
+            // Body: Simple 5ths
+            // Finale: 3rds and 5ths
+            if (!isIntroduction && (step % 8 === 0)) {
 
-                // Play harmony lower/softer
-                triggerSound(ctx, harmonySeed, startTime, 0.03);
+                let harmonyInterval = 4; // roughly a 5th in pentatonic scale
+                if (isFinale && step % 16 === 0) harmonyInterval = 2; // a 3rd
+
+                // Pick a seed relative to current melody note
+                let harmonyIndex = Math.max(0, scaleIndex - harmonyInterval);
+                const harmonySeed = SOUND_SEEDS[harmonyIndex];
+
+                triggerSound(ctx, harmonySeed, startTime, 0.04);
             }
 
-            // "Sparkle" Layer for very rich histories (lots of minerals)
-            // Occasional high bursts on random off-beats if we have lots of minerals
-            if (indices.length > 8 && Math.random() > 0.8) {
-                const sparkleIndex = indices[Math.floor(Math.random() * indices.length)];
-                const sparkleSeed = SOUND_SEEDS[Math.abs(sparkleIndex) % SOUND_SEEDS.length];
-                // Play very short/quiet
-                triggerSound(ctx, sparkleSeed, startTime + (sixteenthNoteTime / 2), 0.02);
+            // Sparkle / Texture Layer
+            // Rare random high pings
+            if (Math.random() > 0.92) {
+                const sparkleIndex = (scaleIndex + 10) % SOUND_SEEDS.length;
+                const sparkleSeed = SOUND_SEEDS[sparkleIndex];
+                triggerSound(ctx, sparkleSeed, startTime + (sixteenthNoteTime * 0.5), 0.02);
             }
         }
     }, []);
