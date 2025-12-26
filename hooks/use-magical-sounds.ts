@@ -170,73 +170,104 @@ export const useMagicalSounds = () => {
         for (let step = 0; step < totalSteps; step++) {
             const startTime = now + (step * sixteenthNoteTime);
 
-            // Structure: 
-            // 0% - 30%: Main Theme (Recognizable)
-            // 30% - 85%: Improvisation / Variations (Non-repetitive, derived from History)
-            // 85% - 100%: Main Theme Reprise (Ending)
-
+            // Structure: 0-30% Head, 30-85% Solo, 85-100% Reprise
             const progress = step / totalSteps;
             const isMainTheme = progress < 0.3 || progress > 0.85;
 
-            // --- 1. MELODY LAYER ---
+            // --- PHRASING & RESTS ---
+            // Create "Breathing" moments.
+            let isRest = false;
+
+            // End of Bar Pause (every 16 steps)
+            if (step % 16 === 15) isRest = true;
+
+            // In Solo: Larger pauses to separate phrases
+            if (!isMainTheme) {
+                // Silence steps 28-31 of every 32-step block (Longer breath)
+                if (step % 32 > 27) isRest = true;
+            }
+
+            if (isRest) continue; // Skip all generation for this step
+
+            // --- 1. MELODY LAYER (Soprano) ---
+            let melodyPlayed = false;
+            let currentRootNote = 0; // Usage for harmony logic
+
             if (step % selectedSong.speed === 0) {
                 let melodyNoteIndex = -999;
                 let volume = 0.07;
 
                 if (isMainTheme) {
-                    // Play defined Motif
                     const noteIndexInPattern = (step / selectedSong.speed) % selectedSong.notes.length;
                     const noteInterval = selectedSong.notes[noteIndexInPattern];
                     if (noteInterval !== null) {
                         melodyNoteIndex = noteInterval + 12; // Middle Octave
-                        if (noteIndexInPattern === 0) volume = 0.1; // Accent start
+                        currentRootNote = noteInterval; // Store for harmony
+                        if (noteIndexInPattern === 0) volume = 0.1;
                     }
                 } else {
-                    // IMPROVISATION PHASE (The "Solo")
-                    // We generate melody from user history, ensuring it doesn't just loop
-                    // Step-based random walk through history
+                    // Solo Phase
+                    // Use history indices
                     const historyIndex = (step + Math.floor(step / 32)) % indices.length;
                     const rawSeed = indices[historyIndex];
 
-                    // Map this raw seed to a "safe" Pentatonic-ish scale interval
-                    // C Major: 0, 2, 4, 5, 7, 9, 11, 12
+                    // Safe intervals
                     const safeIntervals = [0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19];
                     const interval = safeIntervals[rawSeed % safeIntervals.length];
+                    currentRootNote = interval;
 
-                    // Add variation: occasionally jump octave
-                    const octaveOffset = (step % 16 === 0) ? 12 : 0;
-
-                    // Rhythm variation in solo: sometimes skip a note
-                    const rhythmVar = Math.sin(step);
-                    if (rhythmVar > -0.7) { // 70% chance to play
-                        melodyNoteIndex = interval + octaveOffset + 12;
+                    // Rhythm Mask: Only play 60% of time in solo for "space"
+                    if (Math.sin(step * 0.5) > -0.2) {
+                        melodyNoteIndex = interval + 12;
+                        // Variation: Octave jump
+                        if (step % 8 === 0) melodyNoteIndex += 12;
                     }
                 }
 
                 if (melodyNoteIndex !== -999) {
                     const finalIndex = Math.max(0, Math.min(melodyNoteIndex, SOUND_SEEDS.length - 1));
                     triggerSound(ctx, SOUND_SEEDS[finalIndex], startTime, volume);
+                    melodyPlayed = true;
                 }
             }
 
-            // --- 2. BACKING LAYER (User History) ---
-            // Continuous bass/arpeggio to glue it together
-            if (step % 4 === 0) {
-                const bassHistoryIndex = indices[Math.floor(step / 4) % indices.length];
+            // --- 2. HARMONY LAYER (Alto/Tenor) ---
+            // Plays polyphonic parts: 
+            // - If Melody is silent (call-response)
+            // - Or harmonizing (3rd/6th below) on strong beats
+
+            const isHarmonyBeat = step % 4 === 2; // Off-beats or specific syncopation
+
+            // In Theme: Support melody. In Solo: Dialogue.
+            if (isHarmonyBeat && !melodyPlayed) {
+                // Dialogue: Melody paused, Harmony answers
+                // Pick a note from history related to current "Chord" (derived from step)
+                const chordRoot = (Math.floor(step / 16) % 3) * 4; // Simple chord prog
+                const harmonyIndex = indices[(step + 1) % indices.length];
+                const offset = [0, 4, 7][harmonyIndex % 3]; // 1-3-5 chord tones
+
+                let harmonyNote = chordRoot + offset + 12; // Mid octave
+
+                const finalIndex = Math.max(0, Math.min(harmonyNote, SOUND_SEEDS.length - 1));
+                triggerSound(ctx, SOUND_SEEDS[finalIndex], startTime, 0.04);
+            }
+            else if (step % 8 === 0 && melodyPlayed) {
+                // Support: Play a 3rd below melody on downbeats
+                let harmonyNote = currentRootNote + 12 - 4; // Roughly a major 3rd down
+                const finalIndex = Math.max(0, Math.min(harmonyNote, SOUND_SEEDS.length - 1));
+                triggerSound(ctx, SOUND_SEEDS[finalIndex], startTime, 0.03);
+            }
+
+            // --- 3. BASS LAYER (Bass) ---
+            // Foundation. Playing less frequently to leave space?
+            // Let's stick to downbeats but allow 8th note pickup
+            if (step % 8 === 0 || (step % 16 === 14)) {
+                const bassHistoryIndex = indices[Math.floor(step / 8) % indices.length];
                 const safeBassOffsets = [0, 5, 7, 9]; // C, F, G, Am
                 const bassOffset = safeBassOffsets[Math.abs(bassHistoryIndex) % safeBassOffsets.length];
 
-                // If in solo section, maybe play bass slightly louder/busier?
                 const bassVol = isMainTheme ? 0.1 : 0.08;
-
                 triggerSound(ctx, SOUND_SEEDS[bassOffset], startTime, bassVol);
-            }
-
-            // Texture / Sparkle
-            if (Math.random() > 0.92) {
-                const sparkleIndex = indices[Math.floor(Math.random() * indices.length)];
-                const sparkleSeed = SOUND_SEEDS[(Math.abs(sparkleIndex) % 12) + 24];
-                triggerSound(ctx, sparkleSeed, startTime, 0.02);
             }
         }
     }, []);
