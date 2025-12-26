@@ -65,12 +65,13 @@ const minerals = [
 ];
 
 import { useMagicalSounds } from "@/hooks/use-magical-sounds";
-import { Play } from "lucide-react";
+import { Play, ChevronUp, ChevronDown } from "lucide-react";
 
 export default function Home() {
   const [selectedMineral, setSelectedMineral] = useState(minerals[41]);
   const [selectedMessage, setSelectedMessage] = useState(minerals[41].messages[0]);
   const [isSpinning, setIsSpinning] = useState(false);
+  const [isHistoryExpanded, setIsHistoryExpanded] = useState(false);
   // History now also stores the message to allow full restore
   const [history, setHistory] = useState<{ mineral: typeof minerals[0], message: string, soundIndex: number }[]>([]);
 
@@ -253,47 +254,65 @@ export default function Home() {
         </div>
       </main>
 
-      <footer className="px-6 py-6 flex flex-col gap-4 shrink-0 bg-black/40 backdrop-blur-md max-h-[35vh] overflow-y-auto custom-scrollbar">
-        <div className="flex items-center justify-between sticky top-0 bg-black/0 backdrop-blur-sm p-1 z-10 w-full">
+      <footer className="px-6 py-2 flex flex-col gap-2 shrink-0 bg-black/60 backdrop-blur-md border-t border-white/5 transition-all duration-300 ease-in-out">
+        <button
+          onClick={() => setIsHistoryExpanded(!isHistoryExpanded)}
+          className="flex items-center justify-between w-full p-2 hover:bg-white/5 rounded-lg transition-colors group"
+        >
           <div className="flex items-center gap-2">
-            <HistoryIcon size={12} className="text-zinc-500" />
-            <span className="text-[10px] font-black tracking-widest text-zinc-500 uppercase">Collection ({history.length})</span>
+            <HistoryIcon size={12} className="text-zinc-500 group-hover:text-zinc-300" />
+            <span className="text-[10px] font-black tracking-widest text-zinc-500 group-hover:text-zinc-300 uppercase">Collection ({history.length})</span>
           </div>
-        </div>
+          {isHistoryExpanded ? <ChevronDown size={14} className="text-zinc-500" /> : <ChevronUp size={14} className="text-zinc-500" />}
+        </button>
 
-        <div className="flex flex-wrap content-start gap-2 pb-2">
-          {history.length > 0 ? history.map((item, i) => (
+        <AnimatePresence>
+          {isHistoryExpanded && (
             <motion.div
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              key={`${item.mineral.name}-${i}`}
-              onClick={() => restoreHistory(item)}
-              layout
-              className="pl-1.5 pr-3 py-1.5 rounded-full bg-white/5 border border-white/5 flex items-center gap-2 cursor-pointer hover:bg-white/10 hover:border-white/20 transition-all group"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="overflow-hidden"
             >
-              <div className="relative w-8 h-8 rounded-full overflow-hidden bg-black/40 ring-1 ring-white/10 group-hover:ring-white/30 transition-all">
-                {item.mineral.image && (
-                  <Image
-                    src={item.mineral.image}
-                    alt={item.mineral.name}
-                    fill
-                    className="object-cover"
-                    sizes="32px"
-                  />
-                )}
-              </div>
-              <div className="flex flex-col">
-                <span className="text-[10px] font-bold text-zinc-400 group-hover:text-zinc-200 whitespace-nowrap uppercase leading-none transition-colors">
-                  {item.mineral.name.split(' ')[0]}
-                </span>
+              <div className="flex flex-wrap content-start gap-2 pb-4 max-h-[30vh] overflow-y-auto custom-scrollbar">
+
+                <div className="flex flex-wrap content-start gap-2 pb-2">
+                  {history.length > 0 ? history.map((item, i) => (
+                    <motion.div
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      key={`${item.mineral.name}-${i}`}
+                      onClick={() => restoreHistory(item)}
+                      layout
+                      className="pl-1.5 pr-3 py-1.5 rounded-full bg-white/5 border border-white/5 flex items-center gap-2 cursor-pointer hover:bg-white/10 hover:border-white/20 transition-all group"
+                    >
+                      <div className="relative w-8 h-8 rounded-full overflow-hidden bg-black/40 ring-1 ring-white/10 group-hover:ring-white/30 transition-all">
+                        {item.mineral.image && (
+                          <Image
+                            src={item.mineral.image}
+                            alt={item.mineral.name}
+                            fill
+                            className="object-cover"
+                            sizes="32px"
+                          />
+                        )}
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-bold text-zinc-400 group-hover:text-zinc-200 whitespace-nowrap uppercase leading-none transition-colors">
+                          {item.mineral.name.split(' ')[0]}
+                        </span>
+                      </div>
+                    </motion.div>
+                  )) : (
+                    <div className="w-full flex justify-center py-4">
+                      <span className="text-[10px] text-zinc-800 font-bold uppercase tracking-widest italic">Waiting for your first draw...</span>
+                    </div>
+                  )}
+                </div>
               </div>
             </motion.div>
-          )) : (
-            <div className="w-full flex justify-center py-4">
-              <span className="text-[10px] text-zinc-800 font-bold uppercase tracking-widest italic">Waiting for your first draw...</span>
-            </div>
           )}
-        </div>
+        </AnimatePresence>
       </footer>
     </div>
   );
