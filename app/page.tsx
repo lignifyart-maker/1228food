@@ -38,7 +38,7 @@ const minerals = [
   { name: "橄欖石 (Peridot)", theme: "#84cc16", image: "/minerals/24-peridot.webp", messages: ["新生與希望正在發芽，適合為故事加入新角色。", "擺脫負面情緒，讓新的氣息進入你的生活。", "這顏色像極了你被老闆/甲方盯上的臉。"] },
   { name: "坦桑石 (Tanzanite)", theme: "#4f46e5", image: "/minerals/25-tanzanite.webp", messages: ["平衡感性與理性，能讓您的作品更有深度。", "探索未知的領域，在那裡你會找到真正的自己。", "罕見的礦石，送給罕見的、至今還在努力的你。"] },
   { name: "藍晶石 (Kyanite)", theme: "#60a5fa", image: "/minerals/26-kyanite.webp", messages: ["清理雜念，現在的您最適合專注於核心主題。", "喉輪的能量，試著把心裡的話大聲說出來。", "這像是一把藍色的劍，砍斷你那無意義的社交。"] },
-  { name: "紅石英 (Red Jasper)", theme: "#b91c1c", image: "/minerals/27-red-jasper.webp", messages: ["腳踏實地，從最基礎的人物背景開始建構。", "體力是基礎，今天去運動一下換取創作能量。", "生活雖然辛苦，但紅石英建議你不要輕易認輸。"] },
+  { name: "紅碧玉 (Red Jasper)", theme: "#b91c1c", image: "/minerals/27-red-jasper.webp", messages: ["腳踏實地，從最基礎的人物背景開始建構。", "體力是基礎，今天去運動一下換取創作能量。", "生活雖然辛苦，但紅碧玉建議你不要輕易認輸。"] },
   { name: "方解石 (Calcite)", theme: "#fed7aa", image: "/minerals/28-calcite.webp", messages: ["轉換角度看世界，死胡同裡也會有新的出口。", "學習新的技能，這會成為你未來的寫作素材。", "放輕鬆，就算這頁寫爛了也沒什麼大不了。"] },
   { name: "天青石 (Celestite)", theme: "#dbeafe", image: "/minerals/29-celestite.webp", messages: ["讓想像力飛向天際，今天適合構思科幻題材。", "平和的心境能招來好夢，今晚早點睡吧。", "天青色等煙雨，而我在等你的下一章更新。"] },
   { name: "黃鐵礦 (Pyrite)", theme: "#ca8a04", image: "/minerals/30-pyrite.webp", messages: ["看似平凡的事物也含有黃金，提煉日常的詩意。", "意志如鋼鐵般堅硬，不要被小挫折打敗。", "雖然我看起來像黃金，但我知道你不是在想黃金就是在想放假。"] },
@@ -53,7 +53,7 @@ const minerals = [
   { name: "鋰雲母 (Lepidolite)", theme: "#d8b4fe", image: "/minerals/39-lepidolite.webp", messages: ["緩解焦慮，今天不強求進度，只求寫得舒心。", "過渡時期的平靜，接受現狀也是一種前進。", "焦慮也沒用，反正明天事情還是做不完。"] },
   { name: "透輝石 (Diopside)", theme: "#065f46", image: "/minerals/40-diopside.webp", messages: ["連結大自然，描述一場與森林或土地的對話。", "心靈的治癒，從放過自己開始。", "綠色的光芒，提醒你：該綠的是草地，不是你的頭。"] },
   { name: "鋯石 (Zircon)", theme: "#0e7490", image: "/minerals/41-zircon.webp", messages: ["提升作品質感，今天適合進行細微的修辭打磨。", "光芒四射，不要隱藏你的才華。", "我是鋯石，不是鑽石，就像你的草稿還不是成品。"] },
-  { name: "黝簾石 (Anyolite)", theme: "#22c55e", image: "/minerals/42-anyolite.webp", messages: ["生命力與熱情結合，創造一個充滿活力的新場景。", "面對衝突，用熱情去化解冷漠。", "紅配綠，這美感我真的看不懂。"] },
+  { name: "紅寶黝簾石 (Anyolite)", theme: "#22c55e", image: "/minerals/42-anyolite.webp", messages: ["生命力與熱情結合，創造一個充滿活力的新場景。", "面對衝突，用熱情去化解冷漠。", "紅配綠，這美感我真的看不懂。"] },
   { name: "尖晶石 (Spinel)", theme: "#ef4444", image: "/minerals/43-spinel.webp", messages: ["重生與更新，賦予舊角色一個意想不到的身分。", "在壓力下展現韌性，你比想像中更強大。", "別再尖叫了，尖晶石建議你先閉嘴寫稿。"] },
   { name: "藍銅礦 (Azurite)", theme: "#1e3a8a", image: "/minerals/44-azurite.webp", messages: ["開啟直覺力，相信你對故事走向的第一直覺。", "深層的智慧，答案其實早就藏在你心裡。", "藍到發黑，就像你熬夜寫稿的眼圈。"] },
   { name: "捷克隕石 (Moldavite)", theme: "#14532d", image: "/minerals/45-moldavite.webp", messages: ["來自宇宙的靈感，嘗試科幻或超現實的題材。", "劇烈的轉變，讓主角經歷一場震撼的事件。", "我是隕石，我從天上下來是為了砸醒你。"] },
@@ -68,8 +68,8 @@ import { useMagicalSounds } from "@/hooks/use-magical-sounds";
 import { Play } from "lucide-react";
 
 export default function Home() {
-  const [selectedMineral, setSelectedMineral] = useState(minerals[0]);
-  const [selectedMessage, setSelectedMessage] = useState(minerals[0].messages[0]);
+  const [selectedMineral, setSelectedMineral] = useState(minerals[41]);
+  const [selectedMessage, setSelectedMessage] = useState(minerals[41].messages[0]);
   const [isSpinning, setIsSpinning] = useState(false);
   // History now also stores the message to allow full restore
   const [history, setHistory] = useState<{ mineral: typeof minerals[0], message: string, soundIndex: number }[]>([]);
@@ -177,8 +177,21 @@ export default function Home() {
           <div className="glass-panel rounded-2xl p-6 md:p-8 space-y-4 relative overflow-hidden flex flex-col">
             <div className="space-y-1">
               <span className="text-[10px] font-black tracking-[0.3em] text-zinc-500 uppercase">Current Gem</span>
-              <h2 className="text-xl md:text-3xl font-bold font-serif italic text-white truncate">
-                {selectedMineral.name}
+              <h2 className="text-xl md:text-3xl font-bold font-serif text-white truncate flex items-center justify-center sm:justify-start">
+                {(() => {
+                  const parts = selectedMineral.name.split(' (');
+                  if (parts.length === 2) {
+                    return (
+                      <>
+                        <span>{parts[0]}</span>
+                        <span className="text-base md:text-lg ml-6 font-sans font-normal opacity-70 tracking-wide">
+                          {parts[1].replace(')', '')}
+                        </span>
+                      </>
+                    );
+                  }
+                  return <span>{selectedMineral.name}</span>;
+                })()}
               </h2>
             </div>
 
