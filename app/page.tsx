@@ -72,7 +72,7 @@ const minerals = [
   { name: "閃鋅礦 (Sphalerite)", theme: "#d4a017", image: "/minerals/52-sphalerite.webp", messages: ["內在的火花正等待被發掘，別忽略隱藏的才能。", "光芒需要正確的角度才能展現，找到你的舞台。", "比我還會閃的只有...你已讀不回的速度。"] },
   { name: "矽孔雀石 (Chrysocolla)", theme: "#1e90aa", image: "/minerals/53-chrysocolla.webp", messages: ["溫柔的溝通能化解最堅硬的衝突。", "讓思緒如流水般自然流動，答案會浮現。", "藍藍綠綠的，像極了你的錢包——空虛但好看。"] },
   { name: "薔薇輝石 (Rhodonite)", theme: "#db7093", image: "/minerals/54-rhodonite.webp", messages: ["傷疤是故事的一部分，不需要隱藏。", "在混亂中找到美麗，這是創作者的天賦。", "黑線是我的特色，不是 bug 是 feature。"] },
-  { name: "砂金石 (Aventurine)", theme: "#3cb371", image: "/minerals/55-aventurine.webp", messages: ["機會之門正在開啟，保持樂觀往前走。", "好運需要行動配合，不要只是等待。", "我叫砂金石不是沙金石，別打錯字謝謝。"] },
+  { name: "砂金石英 (Aventurine)", theme: "#3cb371", image: "/minerals/55-aventurine.webp", messages: ["機會之門正在開啟，保持樂觀往前走。", "好運需要行動配合，不要只是等待。", "我叫砂金石英不是沙金石，別打錯字謝謝。"] },
   { name: "堇青石 (Iolite)", theme: "#4b0082", image: "/minerals/56-iolite.webp", messages: ["維京人用我導航，你也能找到方向。", "從不同角度看問題，會有意想不到的發現。", "我會變色不是因為心情，是因為你角度太刁鑽。"] },
   { name: "蛇紋石 (Serpentine)", theme: "#556b2f", image: "/minerals/57-serpentine.webp", messages: ["蛻變需要時間，像蛇蛻皮一樣自然。", "釋放舊有的限制，迎接全新的自己。", "我叫蛇紋石，不是蛇皮，請尊重我的身分。"] },
   { name: "賽黃晶 (Danburite)", theme: "#ffe4e1", image: "/minerals/58-danburite.webp", messages: ["純淨的心能看見最真實的答案。", "放下執著，輕盈地面對每一天。", "我透明度很高，跟你的藉口完全相反。"] },
