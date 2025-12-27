@@ -125,6 +125,12 @@ A cute, minimalistic 3D illustration designed as a collectible game asset, squar
 - 如果遇到 429 錯誤（Too Many Requests），等待約 40 秒後重試
 - 生成完一張圖片後，再呼叫 API 生成下一張
 
+**🔄 批次操作建議：**
+- **先生成所有圖片，最後再統一複製**：避免使用者需要頻繁按下 accept
+- 圖片會先存放在 `C:\Users\[USER]\.gemini\antigravity\brain\[SESSION_ID]\` 目錄
+- 全部生成完畢後，使用一個批次指令將所有圖片複製到專案目錄
+- 這樣可以減少使用者的操作中斷
+
 ### 步驟 4：複製並轉換圖片
 
 1. **複製圖片到專案目錄：**

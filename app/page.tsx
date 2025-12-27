@@ -150,6 +150,34 @@ const minerals = [
   { name: "錳鋁榴石 (Spessartine)", theme: "#ff4500", image: "/minerals/123-spessartine.webp", messages: ["火焰般的意志能燒盡一切阻礙，勇往直前。", "在變動中保持活力，你是充滿能量的。", "我叫芬達石，但喝了我你也不會變聰明. . ."] },
   { name: "錫石 (Cassiterite)", theme: "#623c1f", image: "/minerals/124-cassiterite.webp", messages: ["沈穩的根基是成功的保證，腳踏實地前進。", "在平凡中積累財富，時間會證明一切。", "我很重，就像你那堆積如山的未完成清單。"] },
   { name: "紅鋅礦 (Zincite)", theme: "#ff4500", image: "/minerals/125-zincite.webp", messages: ["強大的生命力正在爆發，現在就開始行動。", "在壓力中轉化能量，創造屬於你的奇蹟。", "一百二十五種礦石都抽完了，你還在原地踏步嗎？"] },
+  // 126-130
+  { name: "矽硼鎂鋁石 (Grandidierite)", theme: "#20b2aa", image: "/minerals/126-grandidierite.webp", messages: ["稀有的美需要耐心尋找，不要放棄對完美的追求。", "藍綠色的平靜中藏著智慧，傾聽內心的聲音。", "我這麼稀有，就像你準時完成工作的次數. . ."] },
+  { name: "鋁硼鋯鈣石 (Painite)", theme: "#a52a2a", image: "/minerals/127-painite.webp", messages: ["曾經的世界之最，提醒你：珍惜現在擁有的。", "紅褐色的溫暖中藏著不凡，你也是獨一無二的。", "我曾是世界上最稀有的寶石，你是世界上最會拖的人類。"] },
+  { name: "塔菲石 (Taaffeite)", theme: "#dda0dd", image: "/minerals/128-taaffeite.webp", messages: ["被誤認是常態，但終究會被看見真正的價值。", "淡紫色的夢幻中藏著堅韌，保持你的獨特。", "連寶石學家都認錯我，你認錯 deadline 就不奇怪了. . ."] },
+  { name: "硼鋁石 (Jeremejevite)", theme: "#87ceeb", image: "/minerals/129-jeremejevite.webp", messages: ["天藍色的清澈能洗滌心靈，保持思緒的純淨。", "細長的身形提醒你：專注於一個方向前進。", "我這麼清澈，看穿了你今天又想偷懶的心。"] },
+  { name: "紅綠柱石 (Red Beryl)", theme: "#dc143c", image: "/minerals/130-red-beryl.webp", messages: ["比鑽石更稀有的紅，代表著非凡的熱情。", "猶他州的寶藏提醒你：美麗藏在意想不到的地方。", "我比鑽石貴，你比蟑螂還能熬夜. . ."] },
+  // 131-140
+  { name: "矽硼鉀鈉石 (Poudretteite)", theme: "#ffb6c1", image: "/minerals/131-poudretteite.webp", messages: ["粉紅色的溫柔力量，能化解一切衝突。", "來自加拿大的珍稀，提醒你家鄉也有寶藏。", "我這麼粉嫩，看著你的肝指數真的很擔心. . ."] },
+  { name: "馬斯格拉夫石 (Musgravite)", theme: "#9370db", image: "/minerals/132-musgravite.webp", messages: ["紫灰色的神秘中藏著深度，探索未知的領域。", "澳洲的沙漠孕育了奇蹟，你也能在困境中發光。", "我來自澳洲，你的拖延症來自基因. . ."] },
+  { name: "藍矽硼鈣石 (Serendibite)", theme: "#008080", image: "/minerals/133-serendibite.webp", messages: ["意外的發現往往是最美的禮物，保持開放的心。", "深藍綠色的寧靜中藏著驚喜，期待每一天。", "Serendipity 代表意外之喜，可惜你的稿子沒有驚喜. . ."] },
+  { name: "柱晶石 (Kornerupine)", theme: "#6b8e23", image: "/minerals/134-kornerupine.webp", messages: ["橄欖綠色的沈穩能帶來平衡，專注於當下。", "多色性提醒你：從不同角度看問題會有新發現。", "我會變色，你的臉色也會隨著 deadline 變化. . ."] },
+  { name: "黑蛋白石 (Black Opal)", theme: "#1a1a2e", image: "/minerals/135-black-opal.webp", messages: ["黑暗的底色襯托出最燦爛的彩虹，相信自己。", "澳洲的寶藏提醒你：深沉中藏著萬千光芒。", "我內心有彩虹，你內心只有...想睡覺。"] },
+  { name: "帕帕拉恰藍寶石 (Padparadscha Sapphire)", theme: "#f4a460", image: "/minerals/136-padparadscha-sapphire.webp", messages: ["蓮花色的夕陽光芒，溫柔而堅定地照亮前路。", "粉橘色的浪漫提醒你：生活需要一點美好的幻想。", "我的名字比你整篇文章還難念. . ."] },
+  { name: "藍方石 (Hauyne)", theme: "#0000cd", image: "/minerals/137-hauyne.webp", messages: ["深邃的藍色中藏著宇宙的奧秘，保持好奇心。", "來自火山的禮物，提醒你：壓力能造就美麗。", "我這麼藍，就像你看到這個月帳單的心情。"] },
+  { name: "榍石 (Sphene)", theme: "#9acd32", image: "/minerals/138-sphene.webp", messages: ["比鑽石還閃耀的火彩，你的才華終將被看見。", "黃綠色的活力能驅散陰霾，保持樂觀。", "我的火彩超強，你的進度超慢. . ."] },
+  { name: "符山石 (Vesuvianite)", theme: "#2e8b57", image: "/minerals/139-vesuvianite.webp", messages: ["火山孕育的寶石，提醒你：激情能創造奇蹟。", "綠色的生機中藏著希望，春天終會到來。", "我來自維蘇威火山，你的怒火也快爆發了吧？"] },
+  { name: "藍柱石 (Euclase)", theme: "#87ceeb", image: "/minerals/140-euclase.webp", messages: ["易碎但美麗，提醒你：脆弱不是缺點。", "淡藍色的清新能帶來靈感，保持純淨的心。", "我很容易碎，就像你的玻璃心. . ."] },
+  // 141-150
+  { name: "鎢鉛礦 (Stolzite)", theme: "#daa520", image: "/minerals/141-stolzite.webp", messages: ["金黃色的穩重能帶來財運，腳踏實地前進。", "雙錐形的完美提醒你：平衡是成功的關鍵。", "我長得像金塊，可惜你的存款不像. . ."] },
+  { name: "金綠柱石 (Heliodor)", theme: "#ffd700", image: "/minerals/142-heliodor.webp", messages: ["陽光的禮物，讓金色的光芒照亮你的道路。", "希臘語的太陽提醒你：做自己生命的光源。", "我是太陽的禮物，你是 deadline 的奴隸。"] },
+  { name: "磷葉石 (Phosphophyllite)", theme: "#40e0d0", image: "/minerals/143-phosphophyllite.webp", messages: ["比黃金還珍貴的藍綠色，提醒你珍惜獨特。", "脆弱而美麗，就像最動人的創作。", "動畫讓我爆紅，你的作品什麼時候才能爆紅？"] },
+  { name: "矽鈹石 (Phenakite)", theme: "#f5f5f5", image: "/minerals/144-phenakite.webp", messages: ["無色透明的純淨，讓思緒保持清晰。", "容易被忽略但價值非凡，你也是如此。", "我透明到常常被忽略，就像你的努力一樣（拍肩）。"] },
+  { name: "鈷尖晶石 (Cobalt Spinel)", theme: "#0047ab", image: "/minerals/145-cobalt-spinel.webp", messages: ["鈷藍色的深邃能帶來智慧，沉澱思緒。", "越南的寶藏提醒你：美麗藏在世界各個角落。", "這麼藍的我，映照出你人生的憂鬱. . ."] },
+  { name: "貓眼金綠寶石 (Cat's Eye Chrysoberyl)", theme: "#daa520", image: "/minerals/146-cats-eye-chrysoberyl.webp", messages: ["貓眼的銳利能看透一切，保持覺察力。", "金色的光帶提醒你：專注能帶來力量。", "我眨眼就值千金，你眨眼就過了一天. . ."] },
+  { name: "斧石 (Axinite)", theme: "#8b4513", image: "/minerals/147-axinite.webp", messages: ["斧頭般的銳利能砍斷阻礙，果斷前進。", "棕色的沈穩中藏著力量，相信自己。", "我的名字是斧頭，專門砍你的懶惰。"] },
+  { name: "青金石 (Lazurite)", theme: "#1e3a8a", image: "/minerals/148-lazurite.webp", messages: ["古埃及的寶藏，提醒你：經典永不過時。", "深藍色的夜空中藏著無限可能。", "我是藍金石的主成分，你是拖延症的主力軍. . ."] },
+  { name: "奧勒岡日長石 (Oregon Sunstone)", theme: "#ff6347", image: "/minerals/149-oregon-sunstone.webp", messages: ["銅的閃光帶來溫暖，讓陽光照進心房。", "美國的寶藏提醒你：奇蹟就在身邊。", "我有銅的光芒，你有肝的爆炸. . ."] },
+  { name: "透鋰長石 (Petalite)", theme: "#e6e6fa", image: "/minerals/150-petalite.webp", messages: ["平靜的力量能化解焦慮，深呼吸吧。", "淡淡的存在感也是一種美，不需要張揚。", "一百五十種礦石抽完了，你該開始工作了吧？"] },
 ];
 
 import { useMagicalSounds } from "@/hooks/use-magical-sounds";
