@@ -71,7 +71,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-TW" className="dark">
+    <html lang="zh-TW" className="dark" suppressHydrationWarning>
       <body
         className={`${outfit.variable} ${playfair.variable} ${geistMono.variable} antialiased font-sans`}
       >
