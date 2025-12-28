@@ -18,36 +18,42 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://lithos-inspiration.vercel.app"), // Replace with your actual deployment URL
+  metadataBase: new URL("https://1228food.vercel.app"),
   title: {
-    default: "Lithos Inspiration | 礦石創作與迷因指引",
-    template: "%s | Lithos Inspiration",
+    default: "世界美食圖鑑 | World Food Encyclopedia",
+    template: "%s | 世界美食圖鑑",
   },
-  description: "結合 50 多種神秘礦石能量與創作迷因，為您的創作之路提供不按牌理出牌的指引。從紅寶黝簾石到黑星石，讓每一顆礦石為你的寫作靈感引路。",
-  keywords: ["礦石", "占卜", "創作靈感", "寫作", "靈感", "迷因", "水晶", "能量", "Lithos"],
-  authors: [{ name: "Lithos Team" }],
-  creator: "Lithos Team",
+  description:
+    "探索世界各地的經典美食，透過精美的插畫與博物學風格的介紹，了解每道料理背後的歷史與文化故事。",
+  keywords: [
+    "美食",
+    "世界料理",
+    "食物介紹",
+    "美食圖鑑",
+    "壽司",
+    "披薩",
+    "塔可",
+    "咖哩",
+    "河粉",
+    "food encyclopedia",
+    "world cuisine",
+  ],
+  authors: [{ name: "Food Explorer" }],
+  creator: "Food Explorer",
   openGraph: {
-    title: "Lithos Inspiration | 礦石創作與迷因指引",
-    description: "結合 50 多種神秘礦石能量與創作迷因，為您的創作之路提供不按牌理出牌的指引。",
-    url: "https://lithos-inspiration.vercel.app",
-    siteName: "Lithos Inspiration",
-    locale: "zh_TW",
     type: "website",
-    images: [
-      {
-        url: "/og-image.jpg", // You should create this image in public/
-        width: 1200,
-        height: 630,
-        alt: "Lithos Inspiration Preview",
-      },
-    ],
+    locale: "zh_TW",
+    url: "https://1228food.vercel.app",
+    siteName: "世界美食圖鑑",
+    title: "世界美食圖鑑 | World Food Encyclopedia",
+    description:
+      "探索世界各地的經典美食，透過精美的插畫與博物學風格的介紹，了解每道料理背後的歷史與文化故事。",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lithos Inspiration | 礦石創作與迷因指引",
-    description: "結合 50 多種神秘礦石能量與創作迷因，為您的創作之路提供不按牌理出牌的指引。",
-    images: ["/og-image.jpg"], // Same as OG image
+    title: "Fortune Draw | 隨機抽籤應用",
+    description: "一個美觀的隨機抽籤應用框架，支援自訂項目、圖片和訊息。",
+    images: ["/og-image.jpg"],
   },
   robots: {
     index: true,

@@ -11,263 +11,129 @@ function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-const minerals = [
-  // 1-10
-  { name: "帝王拓帕石 (Imperial Topaz)", theme: "#fb923c", image: "/minerals/01-imperial-topaz-v3.webp", messages: ["展現您的自信，今天適合開啟新的寫作章節。", "溫暖的光芒正包圍著你，試著寫一段療癒人心的文字。", "看到這道橘光了嗎？那是代表『大橘已定』，晚餐就去吃大餐吧！"] },
-  { name: "紫水晶 (Amethyst)", theme: "#a855f7", image: "/minerals/02-amethyst.webp", messages: ["內心平靜是創意的泉源，試著在安靜中尋找靈感。", "夢境是潛意識的訊息，今天就把昨晚的夢寫下來吧。", "紫水晶代表智慧，所以關於感情問題，我一率建議分手。"] },
-  { name: "拉長石 (Labradorite)", theme: "#475569", image: "/minerals/03-labradorite.webp", messages: ["視角轉換會帶來驚喜，試著從反派的角度思考故事。", "平凡的外表下隱藏著閃光，今天去發現身邊被忽略的美。", "別被我的漂亮外表騙了，我內心戲比你的小說草稿還多。"] },
-  { name: "粉晶 (Rose Quartz)", theme: "#f472b6", image: "/minerals/04-rose-quartz.webp", messages: ["創作不需要追求完美的無瑕，誠實面對自己的脆弱。", "多愛自己一點，您的文字溫度來自於您對生活的愛。", "雖然我是招桃花的粉晶，但建議你還是先去招財比較實際。"] },
-  { name: "黑曜石 (Obsidian)", theme: "#18181b", image: "/minerals/05-obsidian.webp", messages: ["直視內心的恐懼，最深刻的故事往往隱藏在黑暗中。", "防護與接地，今天適合處理一些繁瑣但必要的基礎工作。", "我是黑曜石，這代表你的人生...目前也是一片漆黑呢（燦笑）。"] },
-  { name: "海藍寶 (Aquamarine)", theme: "#7dd3fc", image: "/minerals/06-aquamarine.webp", messages: ["清澈的文字能洗滌心靈，嘗試用最簡潔的句子表達。", "像流水一樣順應時勢，有時候放棄抵抗反而會有出口。", "進度像大海一樣深不見底，這就是你現在的稿量嗎？"] },
-  { name: "琥珀 (Amber)", theme: "#f59e0b", image: "/minerals/07-amber.webp", messages: ["將當下的情感封存，這將成為未來創作最珍貴的標本。", "歲月沉澱出的美麗，值得你花時間細細品味。", "這顆琥珀裡面封印的是...你上次說要改但一直沒改的 bug。"] },
-  { name: "紅寶石 (Ruby)", theme: "#dc2626", image: "/minerals/08-ruby.webp", messages: ["燃燒您的熱情！今天適合寫一段讓讀者屏息的熱血情節。", "展現生命力，讓全世界看到你最耀眼的一面。", "紅寶石很貴，所以建議你：今天沒錢就乖乖待在家碼字。"] },
-  { name: "翡翠 (Jade)", theme: "#16a34a", image: "/minerals/09-jade.webp", messages: ["穩定與平衡是長久創作的關鍵，別忘了適度休息。", "德行如玉，保持您的初衷，不要被外界的數字迷惑。", "翡翠代表長壽，這是在暗示你這本書要寫到兩百萬字嗎？"] },
-  { name: "鑽石 (Diamond)", theme: "#ecfeff", image: "/minerals/10-diamond.webp", messages: ["壓力能產生最純淨的作品，堅持下去，光芒即將顯現。", "無堅不摧的意志，是完成長篇小說唯一的道路。", "鑽石恆久遠，你拖稿的理由也一樣恆久遠. . ."] },
-  // 11-20
-  { name: "月光石 (Moonstone)", theme: "#e0e7ff", image: "/minerals/11-moonstone.webp", messages: ["跟隨直覺，有些情節不需要邏輯，只需要感覺。", "溫柔地對待周遭的人，你的柔和會化解衝突。", "月亮代表我的心，但你的薪水可能只有月亮的一半。"] },
-  { name: "孔雀石 (Malachite)", theme: "#047857", image: "/minerals/12-malachite.webp", messages: ["勇敢刪除不再適合的舊草稿，舊的不去新的不來。", "面對改變，不要害怕轉行或嘗試新領域。", "我上面的條紋，跟我現在看你程式碼產生的皺眉紋一樣多。"] },
-  { name: "螢石 (Fluorite)", theme: "#2dd4bf", image: "/minerals/13-fluorite.webp", messages: ["混亂中需要邏輯，今天適合整理您的靈感筆記。", "專注於當下，讓學習成為一種快樂。", "這不是螢石，這是你未來熬夜趕稿時發出的肝火。"] },
-  { name: "黃水晶 (Citrine)", theme: "#facc15", image: "/minerals/14-citrine-v3.webp", messages: ["喜悅能吸引好運，帶著笑容寫下的文字會有魔法。", "自信是成功的基石，相信你值得擁有財富。", "財運來了！快去買張樂透，雖然中獎機率比你準時交稿還低。"] },
-  { name: "石榴石 (Garnet)", theme: "#7f1d1d", image: "/minerals/15-garnet.webp", messages: ["深沈的能量正在蓄積，好故事需要時間醞釀。", "保持忠誠與真實，對待工作與感情皆然。", "石榴石代表氣血，多喝熱水，少看前任的動態。"] },
-  { name: "瑪瑙 (Agate)", theme: "#c2410c", image: "/minerals/16-agate.webp", messages: ["注意環境的小細節，細膩的描寫能讓世界更真實。", "緩慢而穩定地前進，不要跟別人的進度比較。", "人生就像瑪瑙，沒切開之前你都不知道自己多能撐。"] },
-  { name: "紅紋石 (Rhodochrosite)", theme: "#f43f5e", image: "/minerals/17-rhodochrosite.webp", messages: ["誠實面對脆弱，真實的情感最能打動讀者。", "擁抱過去的傷口，它們是滋養創意的養分。", "別再問為什麼沒人愛你了，紅紋石建議你先去洗臉。"] },
-  { name: "舒俱徠石 (Sugilite)", theme: "#6b21a8", image: "/minerals/18-sugilite.webp", messages: ["獨特的視角是您的天賦，不要為了迎合而改變。", "靈性成長需要時間，不要急於看到結果。", "這顏色很貴氣，可惜你的戶頭目前不太貴氣。"] },
-  { name: "天河石 (Amazonite)", theme: "#5eead4", image: "/minerals/19-amazonite.webp", messages: ["勇敢跨越溝通障礙，試著寫一段精彩的對話吧。", "幸運來自於行動，不要只是坐在那裡空想。", "既然天河石都說要溝通了，那你就回一下訊息吧。"] },
-  { name: "鈦晶 (Rutilated Quartz)", theme: "#fef08a", image: "/minerals/20-rutilated-quartz.webp", messages: ["看似無關的靈感即將串聯，保持思緒的開放。", "強大的能量正在運轉，今天適合處理大件任務。", "這就像你的頭髮，雖然亂，但裡面都是財富（？）"] },
-  // 21-30
-  { name: "虎眼石 (Tiger's Eye)", theme: "#b45309", image: "/minerals/21-tigers-eye.webp", messages: ["拿出勇氣去冒險，給您的主角一個挑戰極限的機會。", "保持觀察力，洞察身邊每一個潛在的機會。", "眼睛放亮點！別再把渣男/渣女當成寶了。"] },
-  { name: "黑瑪瑙 (Onyx)", theme: "#1c1917", image: "/minerals/22-onyx.webp", messages: ["自律是創作的基石，今天強迫自己寫下五百字吧。", "保持沈穩，外界的批評無法動搖你的根基。", "我是黑色的，因為我已經看透了你不想努力的心。"] },
-  { name: "蛋白石 (Opal)", theme: "#e2e8f0", image: "/minerals/23-opal.webp", messages: ["捕捉那一瞬間閃過的色彩，靈感是變幻莫測的。", "展現多樣的面貌，不要被單一標籤給定義。", "我的火彩很美，你的未來...只要不懶也會很美。"] },
-  { name: "橄欖石 (Peridot)", theme: "#84cc16", image: "/minerals/24-peridot.webp", messages: ["新生與希望正在發芽，適合為故事加入新角色。", "擺脫負面情緒，讓新的氣息進入你的生活。", "這顏色像極了你被老闆/甲方盯上的臉. . ."] },
-  { name: "坦桑石 (Tanzanite)", theme: "#4f46e5", image: "/minerals/25-tanzanite.webp", messages: ["平衡感性與理性，能讓您的作品更有深度。", "探索未知的領域，在那裡你會找到真正的自己。", "罕見的礦石，送給罕見的、至今還在努力的你。"] },
-  { name: "藍晶石 (Kyanite)", theme: "#60a5fa", image: "/minerals/26-kyanite.webp", messages: ["清理雜念，現在的您最適合專注於核心主題。", "喉輪的能量，試著把心裡的話大聲說出來。", "這像是一把藍色的劍，砍斷你那無意義的社交。"] },
-  { name: "紅碧玉 (Red Jasper)", theme: "#b91c1c", image: "/minerals/27-red-jasper.webp", messages: ["腳踏實地，從最基礎的人物背景開始建構。", "體力是基礎，今天去運動一下換取創作能量。", "生活雖然辛苦，但紅碧玉建議你不要輕易認輸。"] },
-  { name: "方解石 (Calcite)", theme: "#fed7aa", image: "/minerals/28-calcite.webp", messages: ["轉換角度看世界，死胡同裡也會有新的出口。", "學習新的技能，這會成為你未來的寫作素材。", "放輕鬆，就算這頁寫爛了也沒什麼大不了。"] },
-  { name: "天青石 (Celestite)", theme: "#dbeafe", image: "/minerals/29-celestite.webp", messages: ["讓想像力飛向天際，今天適合構思科幻題材。", "平和的心境能招來好夢，今晚早點睡吧。", "天青色等煙雨，而我在等你的下一章更新. . ."] },
-  { name: "黃鐵礦 (Pyrite)", theme: "#ca8a04", image: "/minerals/30-pyrite.webp", messages: ["看似平凡的事物也含有黃金，提煉日常的詩意。", "意志如鋼鐵般堅硬，不要被小挫折打敗。", "雖然我看起來像黃金，但我知道你不是在想黃金就是在想放假。"] },
-  // 31-40
-  { name: "太陽石 (Sunstone)", theme: "#fdba74", image: "/minerals/31-sunstone.webp", messages: ["陽光是最好的動力，去戶外走走，靈感在空氣中。", "展現領導力，今天你就是自己生命的主角。", "充滿正能量的你，看起來就像個沒被工作摧殘過的新人。"] },
-  { name: "綠松石 (Turquoise)", theme: "#06b6d4", image: "/minerals/32-turquoise.webp", messages: ["古老的智慧在呼喚，在故事中加入神話元素。", "旅途平安，今天適合安排一場說走就走的旅行。", "你是我的好朋友，但我還是建議你先去把碗洗了。"] },
-  { name: "紫龍晶 (Charoite)", theme: "#581c87", image: "/minerals/33-charoite.webp", messages: ["接受改變的恐懼，轉化它為作品中的衝突張力。", "深刻的洞察，讓你看到事情不為人知的一面。", "這顏色很魔幻，就像你至今還沒實現的暴富夢。"] },
-  { name: "白水晶 (Clear Quartz)", theme: "#ffffff", image: "/minerals/34-clear-quartz.webp", messages: ["清空一切想法，最純粹的動機將會浮現。", "放大你的意念，專注於你真正想要達成的目標。", "你現在腦袋裡跟這顆水晶一樣，一片空白. . ."] },
-  { name: "血石 (Bloodstone)", theme: "#064e3b", image: "/minerals/35-bloodstone.webp", messages: ["意志力是您的盔甲，不要被一時的批評擊倒。", "找回身體的活力，你需要熱血沸騰的戰鬥感。", "流汗總比流淚好，所以快去運動或是寫稿！"] },
-  { name: "珍珠 (Pearl)", theme: "#fff7ed", image: "/minerals/36-pearl.webp", messages: ["痛苦的磨練終會成珠，珍惜那些流淚的經驗。", "內斂的光芒，不需要張揚也能被看見。", "珍珠代表優雅，請優雅地處理你那堆爛事。"] },
-  { name: "葡萄石 (Prehnite)", theme: "#bbf7d0", image: "/minerals/37-prehnite.webp", messages: ["做足準備迎接未來，努力正在無聲無息積累。", "放下不需要的負擔，空間才能讓新東西進來。", "你以為這是葡萄？不，這是你這輩子吃不到的甜頭。"] },
-  { name: "蘇打石 (Sodalite)", theme: "#1e3a8a", image: "/minerals/38-sodalite.webp", messages: ["邏輯推理的時刻，檢查故事邏輯是否有破綻。", "理性的溝通，勝過感性的咆哮。", "大腦是個好東西，蘇打石希望你有帶出門。"] },
-  { name: "鋰雲母 (Lepidolite)", theme: "#d8b4fe", image: "/minerals/39-lepidolite.webp", messages: ["緩解焦慮，今天不強求進度，只求寫得舒心。", "過渡時期的平靜，接受現狀也是一種前進。", "焦慮也沒用，反正明天事情還是做不完. . ."] },
-  { name: "透輝石 (Diopside)", theme: "#065f46", image: "/minerals/40-diopside.webp", messages: ["連結大自然，描述一場與森林或土地的對話。", "心靈的治癒，從放過自己開始。", "綠色的光芒，提醒你：該綠的是草地，不是你的頭。"] },
-  // 41-50
-  { name: "鋯石 (Zircon)", theme: "#0e7490", image: "/minerals/41-zircon.webp", messages: ["提升作品質感，今天適合進行細微的修辭打磨。", "光芒四射，不要隱藏你的才華。", "我是鋯石，不是鑽石，就像你的草稿還不是成品。"] },
-  { name: "紅寶黝簾石 (Anyolite)", theme: "#22c55e", image: "/minerals/42-anyolite.webp", messages: ["生命力與熱情結合，創造一個充滿活力的新場景。", "面對衝突，用熱情去化解冷漠。", "紅配綠，這美感我真的看不懂. . ."] },
-  { name: "尖晶石 (Spinel)", theme: "#ef4444", image: "/minerals/43-spinel.webp", messages: ["重生與更新，賦予舊角色一個意想不到的身分。", "在壓力下展現韌性，你比想像中更強大。", "別再尖叫了，尖晶石建議你先閉嘴寫稿。"] },
-  { name: "藍銅礦 (Azurite)", theme: "#1e3a8a", image: "/minerals/44-azurite.webp", messages: ["開啟直覺力，相信你對故事走向的第一直覺。", "深層的智慧，答案其實早就藏在你心裡。", "藍到發黑，就像你熬夜寫稿的眼圈。"] },
-  { name: "捷克隕石 (Moldavite)", theme: "#14532d", image: "/minerals/45-moldavite.webp", messages: ["來自宇宙的靈感，嘗試科幻或超現實的題材。", "劇烈的轉變，讓主角經歷一場震撼的事件。", "我是隕石，我從天上下來是為了砸醒你。"] },
-  { name: "紫鋰輝石 (Kunzite)", theme: "#f0abfc", image: "/minerals/46-kunzite.webp", messages: ["無條件的愛，寫一段感人至深的情感戲。", "打開心扉，讓讀者感受到角色的脆弱與真誠。", "粉粉嫩嫩的，適合寫點戀愛腦的劇情. . ."] },
-  { name: "拉利瑪 (Larimar)", theme: "#7dd3fc", image: "/minerals/47-larimar.webp", messages: ["海洋的平靜，讓文字如流水般自然流淌。", "療癒溝通，解決角色之間的誤會。", "看著這片藍，是不是想去海邊？想得美，快寫稿。"] },
-  { name: "赤鐵礦 (Hematite)", theme: "#4b5563", image: "/minerals/48-hematite.webp", messages: ["接地氣，讓故事背景更紮實、更有生活感。", "反彈負能量，不要理會酸民的評論。", "我很重，就像你拖延已久的截稿壓力。"] },
-  { name: "藍玉髓 (Blue Chalcedony)", theme: "#a5b4fc", image: "/minerals/49-blue-chalcedony.webp", messages: ["溫柔的表達，用細膩的筆觸描繪情感。", "內心的安寧，在寫作中找到避風港。", "溫溫柔柔的，適合寫點睡前讀物. . ."] },
-  { name: "黑星石 (Black Star)", theme: "#000000", image: "/minerals/50-black-star.webp", messages: ["黑暗中的指引，讓主角在絕望中看見希望。", "挖掘潛能，你還有很多沒用上的才華。", "你看不到星星？因為星星在你心裡，噁心吧？"] },
-  // 51-60
-  { name: "亞歷山大變石 (Alexandrite)", theme: "#2d8659", image: "/minerals/51-alexandrite.webp", messages: ["環境改變時，展現不同面貌也是一種智慧。", "日夜皆美，你的多面性是獨特的禮物。", "變色龍看了都說讚，你這變臉速度比我還快。"] },
-  { name: "閃鋅礦 (Sphalerite)", theme: "#d4a017", image: "/minerals/52-sphalerite.webp", messages: ["內在的火花正等待被發掘，別忽略隱藏的才能。", "光芒需要正確的角度才能展現，找到你的舞台。", "比我還會閃的只有...你已讀不回的速度. . ."] },
-  { name: "矽孔雀石 (Chrysocolla)", theme: "#1e90aa", image: "/minerals/53-chrysocolla.webp", messages: ["溫柔的溝通能化解最堅硬的衝突。", "讓思緒如流水般自然流動，答案會浮現。", "藍藍綠綠的，像極了你的錢包——空虛但好看。"] },
-  { name: "薔薇輝石 (Rhodonite)", theme: "#db7093", image: "/minerals/54-rhodonite.webp", messages: ["傷疤是故事的一部分，不需要隱藏。", "在混亂中找到美麗，這是創作者的天賦。", "黑線是我的特色，不是 bug 是 feature。"] },
-  { name: "砂金石英 (Aventurine)", theme: "#3cb371", image: "/minerals/55-aventurine.webp", messages: ["機會之門正在開啟，保持樂觀往前走。", "好運需要行動配合，不要只是等待。", "我叫砂金石英不是沙金石，別打錯字謝謝. . ."] },
-  { name: "堇青石 (Iolite)", theme: "#4b0082", image: "/minerals/56-iolite.webp", messages: ["維京人用我導航，你也能找到方向。", "從不同角度看問題，會有意想不到的發現。", "我會變色不是因為心情，是因為你角度太刁鑽。"] },
-  { name: "蛇紋石 (Serpentine)", theme: "#556b2f", image: "/minerals/57-serpentine.webp", messages: ["蛻變需要時間，像蛇蛻皮一樣自然。", "釋放舊有的限制，迎接全新的自己。", "我叫蛇紋石，不是蛇皮，請尊重我的身分。"] },
-  { name: "賽黃晶 (Danburite)", theme: "#ffe4e1", image: "/minerals/58-danburite.webp", messages: ["純淨的心能看見最真實的答案。", "放下執著，輕盈地面對每一天。", "我透明度很高，跟你的藉口完全相反. . ."] },
-  { name: "白紋石 (Howlite)", theme: "#f5f5f5", image: "/minerals/59-howlite.webp", messages: ["耐心是最被低估的超能力。", "在喧囂中保持內心的平靜。", "我是白紋石，不是廉價的綠松石替代品（生氣）。"] },
-  { name: "紅玉髓 (Carnelian)", theme: "#e25822", image: "/minerals/60-carnelian.webp", messages: ["點燃內心的火焰，勇敢追求目標。", "行動力是改變現狀的第一步。", "我這麼熱情，你卻這麼冷漠對待 deadline。"] },
-  // 61-70
-  { name: "苔紋瑪瑙 (Moss Agate)", theme: "#8fbc8f", image: "/minerals/61-moss-agate.webp", messages: ["成長是緩慢的，但每天都在發生。", "與大自然連結，找回最原始的創作力。", "我體內有小森林，你體內只有外送炸雞. . ."] },
-  { name: "藍紋瑪瑙 (Blue Lace Agate)", theme: "#b0c4de", image: "/minerals/62-blue-lace-agate.webp", messages: ["溫柔的力量往往比強硬更有效。", "用平和的語氣說出真心話。", "這麼優雅的藍，你怎麼配天天穿黑色？"] },
-  { name: "火蛋白石 (Fire Opal)", theme: "#ff6347", image: "/minerals/63-fire-opal.webp", messages: ["讓創意之火自由燃燒。", "熱情是感染他人的最佳方式。", "我內心有火，你內心只有...想下班。"] },
-  { name: "透石膏 (Selenite)", theme: "#f0ffff", image: "/minerals/64-selenite.webp", messages: ["月亮的光輝提醒你，黑暗之後總有光明。", "淨化思緒，為新的靈感騰出空間。", "我這麼仙氣飄飄，你卻還在熬夜看迷因. . ."] },
-  { name: "阿帕契之淚 (Apache Tear)", theme: "#3d3d3d", image: "/minerals/65-apache-tear.webp", messages: ["眼淚也是力量的展現，不要害怕脆弱。", "悲傷過後，會有更清晰的視野。", "比你哭得還透澈，但至少我很美。"] },
-  { name: "次石墨 (Shungite)", theme: "#1a1a1a", image: "/minerals/66-shungite.webp", messages: ["古老的智慧正在守護著你。", "淨化環境，為創作營造純淨空間。", "我是二十億年的古董，你的拖延症也差不多這麼老。"] },
-  { name: "祖母綠 (Emerald)", theme: "#50c878", image: "/minerals/67-emerald.webp", messages: ["真正的價值不需要完美無瑕。", "用心去愛，愛會回饋你豐盛的靈感。", "我是四大寶石之一，你是四大拖延之王. . ."] },
-  { name: "水光水晶 (Aqua Aura)", theme: "#00ced1", image: "/minerals/68-aqua-aura.webp", messages: ["結合科技與自然，創造全新的可能。", "讓溝通更順暢，表達更清晰。", "我是水晶界的賽博龐克，你是 deadline 界的末日戰士。"] },
-  { name: "煙水晶 (Smoky Quartz)", theme: "#756f6a", image: "/minerals/69-smoky-quartz.webp", messages: ["接地氣，讓飄忽的想法落實成行動。", "釋放負面能量，輕裝上陣。", "我看起來很 chill，但其實一直在吸收你的負能量。"] },
-  { name: "鉍 (Bismuth)", theme: "#ff69b4", image: "/minerals/70-bismuth.webp", messages: ["打破常規，創造屬於自己的美學。", "彩虹階梯提醒你，成功是一步一步來的。", "我的造型比你的人生規劃還有結構性. . ."] },
-  // 71-80
-  { name: "藍寶石 (Sapphire)", theme: "#0f52ba", image: "/minerals/71-sapphire.webp", messages: ["智慧與忠誠，是創作路上的最佳伴侶。", "保持專注，藍色的深邃會帶來清明。", "我這麼尊貴，你居然用來問「今天吃什麼」？"] },
-  { name: "綠玉髓 (Chrysoprase)", theme: "#7fff00", image: "/minerals/72-chrysoprase.webp", messages: ["樂觀是可以練習的，從小事開始。", "讓心靈充滿希望的綠意。", "這麼清新的綠，你配嗎？（開玩笑的啦）"] },
-  { name: "黑碧璽 (Black Tourmaline)", theme: "#0d0d0d", image: "/minerals/73-black-tourmaline.webp", messages: ["建立邊界，保護你的創作能量。", "負面評價無法穿透你的防護罩。", "我是電氣石，專門吸收酸民的惡意評論. . ."] },
-  { name: "磷灰石 (Apatite)", theme: "#20b2aa", image: "/minerals/74-apatite.webp", messages: ["清晰的目標是成功的一半。", "學習新知識，為創作注入新養分。", "我的名字聽起來像『食慾』，但你現在需要的是寫作慾。"] },
-  { name: "彩虹月光石 (Rainbow Moonstone)", theme: "#e6e6fa", image: "/minerals/75-rainbow-moonstone.webp", messages: ["內在的光芒會在適當的時機展現。", "相信直覺，它是你最可靠的指引。", "我比普通月光石還會發光，就像你比昨天更會拖稿。"] },
-  { name: "海洋碧玉 (Ocean Jasper)", theme: "#66cdaa", image: "/minerals/76-ocean-jasper.webp", messages: ["生命中的每個圓點都有它的意義。", "接受不完美，那正是獨特之處。", "我身上的圈圈，是你人生繞的彎路數量. . ."] },
-  { name: "幽靈水晶 (Phantom Quartz)", theme: "#9370db", image: "/minerals/77-phantom-quartz.webp", messages: ["過去的經歷成就了現在的你。", "層層疊疊的成長，都值得被紀念。", "我體內有幽靈，你體內有未完成的稿債。"] },
-  { name: "魚眼石 (Apophyllite)", theme: "#e0ffff", image: "/minerals/78-apophyllite.webp", messages: ["清澈的心靈能看見更遠的未來。", "放下執念，讓光芒自然流入。", "這麼透明的我，看穿了你想偷懶的心。"] },
-  { name: "霰石 (Aragonite)", theme: "#daa520", image: "/minerals/79-aragonite.webp", messages: ["穩定你的根基，才能向上生長。", "在壓力中保持平衡是一門藝術。", "我長得像海星，但你的進度還在海底. . ."] },
-  { name: "彼得石 (Pietersite)", theme: "#4682b4", image: "/minerals/80-pietersite.webp", messages: ["風暴過後總有平靜，堅持就對了。", "混亂中也能找到美麗的秩序。", "暴風雨來臨前的寧靜，就是你截稿前的假象。"] },
-  // 81-90
-  { name: "翠銅礦 (Dioptase)", theme: "#00fa9a", image: "/minerals/81-dioptase.webp", messages: ["心靈的療癒從原諒自己開始。", "綠色的希望正在萌芽。", "這麼鮮豔的綠，是你眼紅別人進度的顏色。"] },
-  { name: "鈷方解石 (Cobaltoan Calcite)", theme: "#ff1493", image: "/minerals/82-cobaltoan-calcite.webp", messages: ["愛自己是一切創作的起點。", "粉紅色的能量正在療癒你。", "這麼粉嫩的我，看著你的黑眼圈真的很心疼. . ."] },
-  { name: "黃銅礦 (Chalcopyrite)", theme: "#b8860b", image: "/minerals/83-chalcopyrite.webp", messages: ["在平凡中發現非凡的光芒。", "保持好奇心，世界充滿驚喜。", "我會變色，就像你的心情隨著進度起伏。"] },
-  { name: "鉬鉛礦 (Wulfenite)", theme: "#ff8c00", image: "/minerals/84-wulfenite.webp", messages: ["脆弱不是缺點，是獨特的美。", "在限制中找到創意的空間。", "我這麼薄透，就像你對 deadline 的重視程度。"] },
-  { name: "輝沸石 (Stilbite)", theme: "#ffc0cb", image: "/minerals/85-stilbite.webp", messages: ["溫柔地對待自己的夢想。", "安靜中自有力量。", "我長得像蝴蝶結，你的人生卻還沒打結. . ."] },
-  { name: "異極礦 (Hemimorphite)", theme: "#87ceeb", image: "/minerals/86-hemimorphite.webp", messages: ["表達真實的自己需要勇氣。", "天空藍的平靜，正是你需要的。", "我兩端長得不一樣，就像你說的和做的。"] },
-  { name: "綠簾石 (Epidote)", theme: "#6b8e23", image: "/minerals/87-epidote.webp", messages: ["放大生命中美好的部分。", "成長有時需要一點壓力。", "我叫綠簾石，不是你逃避現實的藉口。"] },
-  { name: "天使石 (Angelite)", theme: "#b0e0e6", image: "/minerals/88-angelite.webp", messages: ["溫柔的力量能化解一切衝突。", "與內在的平靜連結。", "我這麼天使，你卻這麼惡魔般地拖稿. . ."] },
-  { name: "樹紋瑪瑙 (Tree Agate)", theme: "#228b22", image: "/minerals/89-tree-agate.webp", messages: ["在城市中也能找到自然的寧靜。", "慢慢扎根，才能穩穩成長。", "我體內有樹，你體內有無數未完成的構想。"] },
-  { name: "粉紅蛋白石 (Pink Opal)", theme: "#ffb6c1", image: "/minerals/90-pink-opal.webp", messages: ["溫柔是一種強大的力量。", "粉色的夢想值得被實現。", "這麼少女心的粉色，配你這麼老的拖延症。"] },
-  // 91-100
-  { name: "西瓜碧璽 (Watermelon Tourmaline)", theme: "#ff6b6b", image: "/minerals/91-watermelon-tourmaline.webp", messages: ["表裡如一，做真實的自己。", "生命中的甜蜜值得品嚐。", "我長得像西瓜，你的進度卻還在播種. . ."] },
-  { name: "黃色方解石 (Yellow Calcite)", theme: "#ffd700", image: "/minerals/92-yellow-calcite.webp", messages: ["自信的光芒從內心散發。", "積極的態度能改變一切。", "這麼陽光的黃，照不亮你拖延的黑暗面。"] },
-  { name: "水錳礦 (Manganite)", theme: "#2f4f4f", image: "/minerals/93-manganite.webp", messages: ["在黑暗中也能發現光芒。", "深沉的力量正在積累。", "我這麼低調的黑，比你高調的拖延還有質感。"] },
-  { name: "金綠寶石 (Chrysoberyl)", theme: "#9acd32", image: "/minerals/94-chrysoberyl.webp", messages: ["堅持讓你與眾不同。", "閃耀的未來正在等著你。", "我是貓眼石的本尊，你是拖延症的代言人。"] },
-  { name: "水矽釩鈣石 (Cavansite)", theme: "#4169e1", image: "/minerals/95-cavansite.webp", messages: ["稀有的才華值得被珍惜。", "讓思緒像藍天一樣開闊。", "我這麼稀有，你的準時交稿更稀有. . ."] },
-  { name: "鉻鉛礦 (Crocoite)", theme: "#ff4500", image: "/minerals/96-crocoite.webp", messages: ["熱情是創作最好的燃料。", "鮮豔的色彩代表豐富的生命力。", "我這麼橘紅，就像你被催稿時的臉色。"] },
-  { name: "銀星石 (Astrophyllite)", theme: "#cd7f32", image: "/minerals/97-astrophyllite.webp", messages: ["像星星一樣放射光芒，你的才華終將被看見。", "金色的葉片提醒你，成長是向外擴展的。", "我長得像星爆，你的進度卻像黑洞一樣停滯。"] },
-  { name: "星光粉晶 (Star Rose Quartz)", theme: "#ffb7c5", image: "/minerals/98-star-rose-quartz.webp", messages: ["愛的光芒從心中放射。", "你值得擁有閃耀的幸福。", "我有六芒星，你有六百個未完成的想法. . ."] },
-  { name: "辰砂 (Cinnabar)", theme: "#e34234", image: "/minerals/99-cinnabar.webp", messages: ["變革需要勇氣與決心。", "紅色的能量帶來轉化的力量。", "我是硃砂，古人用我寫符咒，你用我求準時交稿。"] },
-  { name: "彩虹螢石 (Rainbow Fluorite)", theme: "#9932cc", image: "/minerals/100-rainbow-fluorite.webp", messages: ["生命中的每種色彩都有意義。", "整合所有的經歷，創造完整的你。", "一百種礦石你都看完了，稿子呢？"] },
-  // 101-110
-  { name: "釩鉛礦 (Vanadinite)", theme: "#d45600", image: "/minerals/101-vanadinite.webp", messages: ["在繁瑣中建立秩序，讓能量穩定流動。", "專注於目標，不要被外界的雜音干擾。", "我長得像齒輪，提醒你：該動起來了，別再空轉. . ."] },
-  { name: "菱鋅礦 (Smithsonite)", theme: "#87ceeb", image: "/minerals/102-smithsonite.webp", messages: ["溫柔地接納自己的不完美，那是成長的養分。", "平靜的心境能化解一切焦慮。", "我長得像葡萄，但你現在需要的是腦袋不是胃口。"] },
-  { name: "藍鐵礦 (Vivianite)", theme: "#4682b4", image: "/minerals/103-vivianite.webp", messages: ["在黑暗中尋找深邃的智慧，答案就在你心中。", "保持內在的寧靜，外界的風雨無法動搖你。", "我會隨著光線變深，就像你截稿前的臉色. . ."] },
-  { name: "白鎢礦 (Scheelite)", theme: "#d4af37", image: "/minerals/104-scheelite.webp", messages: ["在平凡中提煉不凡，你的價值由你定義。", "保持清晰的思緒，看穿事物的本質。", "我在紫外燈下會發光，就像你熬夜時發光的肝。"] },
-  { name: "輝銻礦 (Stibnite)", theme: "#708090", image: "/minerals/105-stibnite.webp", messages: ["鋒芒畢露有時是必要的，勇敢展現你的才華。", "在壓力中保持堅韌，你是無堅不摧的。", "我長得像劍，是用來砍斷你那無窮無盡的懶惰. . ."] },
-  { name: "磷氯鉛礦 (Pyromorphite)", theme: "#32cd32", image: "/minerals/106-pyromorphite.webp", messages: ["生機盎然的創意正在萌芽，抓住那一閃而過的想法。", "在混亂中建立結構，讓美感自然呈現。", "我這麼翠綠，是在暗示你該去草地上滾一滾了。"] },
-  { name: "鈷華 (Erythrite)", theme: "#dc143c", image: "/minerals/107-erythrite.webp", messages: ["熱情是最好的導航，跟隨你的心去創作。", "在細微處發現驚喜，生命充滿了色彩。", "我叫鈷華，不是櫻花，別再做白日夢了. . ."] },
-  { name: "砷鉛礦 (Mimetite)", theme: "#ffd700", image: "/minerals/108-mimetite.webp", messages: ["金色的陽光照亮你的前程，保持積極的態度。", "在變動中尋找平衡，你是最獨特的存在。", "我長得像糖果，但吃下去你會看到人生的終點。"] },
-  { name: "水砷鋅礦 (Adamite)", theme: "#3b845e", image: "/minerals/109-adamite.webp", messages: ["在限制中尋找自由，創意的空間是無限的。", "保持純淨的初衷，不要被名利蒙蔽。", "我會發出強烈的螢光，提醒你：該閃耀的是你的作品. . ."] },
-  { name: "雄黃 (Realgar)", theme: "#e9692c", image: "/minerals/110-realgar.webp", messages: ["避邪除穢，遠離那些消耗你能量的人事物。", "勇敢面對挑戰，你的力量超乎想像。", "我是雄黃，專門對付你這種愛拖延的蛇精。"] },
-  // 111-120
-  { name: "雌黃 (Orpiment)", theme: "#fcd21c", image: "/minerals/111-orpiment.webp", messages: ["明亮的智慧能照破黑暗，保持學習的熱情。", "在平凡中發現黃金，提煉生活的詩意。", "我跟雄黃是好搭檔，就像你跟沙發是連體嬰. . ."] },
-  { name: "藍錐礦 (Benitoite)", theme: "#007baa", image: "/minerals/112-benitoite.webp", messages: ["稀有的才華需要時間打磨，不要急於求成。", "在深邃的藍色中尋找平靜，與內在連結。", "我比鑽石還稀有，就像你準時交稿的次數。"] },
-  { name: "玫瑰榴石 (Rhodolite)", theme: "#c64397", image: "/minerals/113-rhodolite.webp", messages: ["愛與熱情的結合，能創造出最動人的作品。", "展現你的柔美與堅毅，你是最美的風景。", "這顏色很浪漫，可惜你的生活只有加班. . ."] },
-  { name: "黃榴石 (Topazolite)", theme: "#ffd700", image: "/minerals/114-topazolite.webp", messages: ["溫暖的光芒守護著你，今天適合分享喜悅。", "保持樂觀的心態，好運會不請自來。", "我叫黃榴石，不是黃豆，請看清楚再抽。"] },
-  { name: "鈣鉻榴石 (Uvarovite)", theme: "#3cb371", image: "/minerals/115-uvarovite.webp", messages: ["微小而堅定的力量，能匯聚成巨大的成就。", "在細節中展現精緻，這是創作者的堅持。", "我長得像綠色砂糖，但你的生活一點都不甜. . ."] },
-  { name: "翠榴石 (Demantoid)", theme: "#6b8e23", image: "/minerals/116-demantoid.webp", messages: ["璀璨的光芒來自於內在的純淨，保持真實。", "在壓力中綻放，你是最耀眼的寶石。", "我的火彩比鑽石還強，你的懶惰比黑洞還深。"] },
-  { name: "沙弗萊石 (Tsavorite)", theme: "#324d4e", image: "/minerals/117-tsavorite.webp", messages: ["野性的力量與優雅並存，勇敢表達你的獨特。", "在森林的深處尋找靈感，與自然共鳴。", "沙弗萊代表隨野而生，你卻隨地而睡. . ."] },
-  { name: "赤銅礦 (Cuprite)", theme: "#c91b1a", image: "/minerals/118-cuprite.webp", messages: ["深沈的能量正在覺醒，現在是行動的最佳時機。", "在挑戰中展現勇氣，你是天生的戰士。", "紅到發黑，就像你被退稿時的臉色。"] },
-  { name: "氯銅礦 (Atacamite)", theme: "#228b22", image: "/minerals/119-atacamite.webp", messages: ["在乾旱中尋找水源，在困境中尋找希望。", "保持韌性，生命總會找到出路。", "我長得像仙人掌，提醒你：別隨便碰我，快去寫稿. . ."] },
-  { name: "帕拉伊巴碧璽 (Paraiba Tourmaline)", theme: "#40e0d0", image: "/minerals/120-paraiba-tourmaline.webp", messages: ["霓虹般的光芒照亮夢想，相信奇蹟會發生。", "獨一無二的色彩，展現你最真實的個性。", "我貴到你買不起，所以還是乖乖努力工作吧。"] },
-  // 121-125
-  { name: "靛藍碧璽 (Indicolite)", theme: "#88a5af", image: "/minerals/121-indicolite.webp", messages: ["冷靜的思考能解決最複雜的問題，保持理智。", "在深藍色的海洋中尋找答案，平靜是力量。", "這顏色很憂鬱，就像你看到存款餘額的心情. . ."] },
-  { name: "紅碧璽 (Rubellite)", theme: "#de3163", image: "/minerals/122-rubellite.webp", messages: ["燃燒你的熱情，讓世界感受你的能量。", "在愛中成長，在創作中找到喜悅。", "我是紅碧璽，不是紅寶石，別再認錯人了。"] },
-  { name: "錳鋁榴石 (Spessartine)", theme: "#ff4500", image: "/minerals/123-spessartine.webp", messages: ["火焰般的意志能燒盡一切阻礙，勇往直前。", "在變動中保持活力，你是充滿能量的。", "我叫芬達石，但喝了我你也不會變聰明. . ."] },
-  { name: "錫石 (Cassiterite)", theme: "#623c1f", image: "/minerals/124-cassiterite.webp", messages: ["沈穩的根基是成功的保證，腳踏實地前進。", "在平凡中積累財富，時間會證明一切。", "我很重，就像你那堆積如山的未完成清單。"] },
-  { name: "紅鋅礦 (Zincite)", theme: "#ff4500", image: "/minerals/125-zincite.webp", messages: ["強大的生命力正在爆發，現在就開始行動。", "在壓力中轉化能量，創造屬於你的奇蹟。", "一百二十五種礦石都抽完了，你還在原地踏步嗎？"] },
-  // 126-130
-  { name: "矽硼鎂鋁石 (Grandidierite)", theme: "#20b2aa", image: "/minerals/126-grandidierite.webp", messages: ["稀有的美需要耐心尋找，不要放棄對完美的追求。", "藍綠色的平靜中藏著智慧，傾聽內心的聲音。", "我這麼稀有，就像你準時完成工作的次數. . ."] },
-  { name: "鋁硼鋯鈣石 (Painite)", theme: "#a52a2a", image: "/minerals/127-painite.webp", messages: ["曾經的世界之最，提醒你：珍惜現在擁有的。", "紅褐色的溫暖中藏著不凡，你也是獨一無二的。", "我曾是世界上最稀有的寶石，你是世界上最會拖的人類。"] },
-  { name: "塔菲石 (Taaffeite)", theme: "#dda0dd", image: "/minerals/128-taaffeite.webp", messages: ["被誤認是常態，但終究會被看見真正的價值。", "淡紫色的夢幻中藏著堅韌，保持你的獨特。", "連寶石學家都認錯我，你認錯 deadline 就不奇怪了. . ."] },
-  { name: "硼鋁石 (Jeremejevite)", theme: "#87ceeb", image: "/minerals/129-jeremejevite.webp", messages: ["天藍色的清澈能洗滌心靈，保持思緒的純淨。", "細長的身形提醒你：專注於一個方向前進。", "我這麼清澈，看穿了你今天又想偷懶的心。"] },
-  { name: "紅綠柱石 (Red Beryl)", theme: "#dc143c", image: "/minerals/130-red-beryl.webp", messages: ["比鑽石更稀有的紅，代表著非凡的熱情。", "猶他州的寶藏提醒你：美麗藏在意想不到的地方。", "我比鑽石貴，你比蟑螂還能熬夜. . ."] },
-  // 131-140
-  { name: "矽硼鉀鈉石 (Poudretteite)", theme: "#ffb6c1", image: "/minerals/131-poudretteite.webp", messages: ["粉紅色的溫柔力量，能化解一切衝突。", "來自加拿大的珍稀，提醒你家鄉也有寶藏。", "我這麼粉嫩，看著你的肝指數真的很擔心. . ."] },
-  { name: "馬斯格拉夫石 (Musgravite)", theme: "#9370db", image: "/minerals/132-musgravite.webp", messages: ["紫灰色的神秘中藏著深度，探索未知的領域。", "澳洲的沙漠孕育了奇蹟，你也能在困境中發光。", "我來自澳洲，你的拖延症來自基因. . ."] },
-  { name: "藍矽硼鈣石 (Serendibite)", theme: "#008080", image: "/minerals/133-serendibite.webp", messages: ["意外的發現往往是最美的禮物，保持開放的心。", "深藍綠色的寧靜中藏著驚喜，期待每一天。", "Serendipity 代表意外之喜，可惜你的稿子沒有驚喜. . ."] },
-  { name: "柱晶石 (Kornerupine)", theme: "#6b8e23", image: "/minerals/134-kornerupine.webp", messages: ["橄欖綠色的沈穩能帶來平衡，專注於當下。", "多色性提醒你：從不同角度看問題會有新發現。", "我會變色，你的臉色也會隨著 deadline 變化. . ."] },
-  { name: "黑蛋白石 (Black Opal)", theme: "#1a1a2e", image: "/minerals/135-black-opal.webp", messages: ["黑暗的底色襯托出最燦爛的彩虹，相信自己。", "澳洲的寶藏提醒你：深沉中藏著萬千光芒。", "我內心有彩虹，你內心只有...想睡覺。"] },
-  { name: "帕帕拉恰藍寶石 (Padparadscha Sapphire)", theme: "#f4a460", image: "/minerals/136-padparadscha-sapphire.webp", messages: ["蓮花色的夕陽光芒，溫柔而堅定地照亮前路。", "粉橘色的浪漫提醒你：生活需要一點美好的幻想。", "我的名字比你整篇文章還難念. . ."] },
-  { name: "藍方石 (Hauyne)", theme: "#0000cd", image: "/minerals/137-hauyne.webp", messages: ["深邃的藍色中藏著宇宙的奧秘，保持好奇心。", "來自火山的禮物，提醒你：壓力能造就美麗。", "我這麼藍，就像你看到這個月帳單的心情。"] },
-  { name: "榍石 (Sphene)", theme: "#9acd32", image: "/minerals/138-sphene.webp", messages: ["比鑽石還閃耀的火彩，你的才華終將被看見。", "黃綠色的活力能驅散陰霾，保持樂觀。", "我的火彩超強，你的進度超慢. . ."] },
-  { name: "符山石 (Vesuvianite)", theme: "#2e8b57", image: "/minerals/139-vesuvianite.webp", messages: ["火山孕育的寶石，提醒你：激情能創造奇蹟。", "綠色的生機中藏著希望，春天終會到來。", "我來自維蘇威火山，你的怒火也快爆發了吧？"] },
-  { name: "藍柱石 (Euclase)", theme: "#87ceeb", image: "/minerals/140-euclase.webp", messages: ["易碎但美麗，提醒你：脆弱不是缺點。", "淡藍色的清新能帶來靈感，保持純淨的心。", "我很容易碎，就像你的玻璃心. . ."] },
-  // 141-150
-  { name: "鎢鉛礦 (Stolzite)", theme: "#daa520", image: "/minerals/141-stolzite.webp", messages: ["金黃色的穩重能帶來財運，腳踏實地前進。", "雙錐形的完美提醒你：平衡是成功的關鍵。", "我長得像金塊，可惜你的存款不像. . ."] },
-  { name: "金綠柱石 (Heliodor)", theme: "#ffd700", image: "/minerals/142-heliodor.webp", messages: ["陽光的禮物，讓金色的光芒照亮你的道路。", "希臘語的太陽提醒你：做自己生命的光源。", "我是太陽的禮物，你是 deadline 的奴隸。"] },
-  { name: "磷葉石 (Phosphophyllite)", theme: "#40e0d0", image: "/minerals/143-phosphophyllite.webp", messages: ["比黃金還珍貴的藍綠色，提醒你珍惜獨特。", "脆弱而美麗，就像最動人的創作。", "動畫讓我爆紅，你的作品什麼時候才能爆紅？"] },
-  { name: "矽鈹石 (Phenakite)", theme: "#f5f5f5", image: "/minerals/144-phenakite.webp", messages: ["無色透明的純淨，讓思緒保持清晰。", "容易被忽略但價值非凡，你也是如此。", "我透明到常常被忽略，就像你的努力一樣（拍肩）。"] },
-  { name: "鈷尖晶石 (Cobalt Spinel)", theme: "#0047ab", image: "/minerals/145-cobalt-spinel.webp", messages: ["鈷藍色的深邃能帶來智慧，沉澱思緒。", "越南的寶藏提醒你：美麗藏在世界各個角落。", "這麼藍的我，映照出你人生的憂鬱. . ."] },
-  { name: "貓眼金綠寶石 (Cat's Eye Chrysoberyl)", theme: "#daa520", image: "/minerals/146-cats-eye-chrysoberyl.webp", messages: ["貓眼的銳利能看透一切，保持覺察力。", "金色的光帶提醒你：專注能帶來力量。", "我眨眼就值千金，你眨眼就過了一天. . ."] },
-  { name: "斧石 (Axinite)", theme: "#8b4513", image: "/minerals/147-axinite.webp", messages: ["斧頭般的銳利能砍斷阻礙，果斷前進。", "棕色的沈穩中藏著力量，相信自己。", "我的名字是斧頭，專門砍你的懶惰。"] },
-  { name: "青金石 (Lazurite)", theme: "#1e3a8a", image: "/minerals/148-lazurite.webp", messages: ["古埃及的寶藏，提醒你：經典永不過時。", "深藍色的夜空中藏著無限可能。", "我是藍金石的主成分，你是拖延症的主力軍. . ."] },
-  { name: "奧勒岡日長石 (Oregon Sunstone)", theme: "#ff6347", image: "/minerals/149-oregon-sunstone.webp", messages: ["銅的閃光帶來溫暖，讓陽光照進心房。", "美國的寶藏提醒你：奇蹟就在身邊。", "我有銅的光芒，你有肝的爆炸. . ."] },
-  { name: "透鋰長石 (Petalite)", theme: "#e6e6fa", image: "/minerals/150-petalite.webp", messages: ["平靜的力量能化解焦慮，深呼吸吧。", "淡淡的存在感也是一種美，不需要張揚。", "一百五十種礦石抽完了，你該開始工作了吧？"] },
-  // 151-160
-  { name: "玄能石 (Nuummite)", theme: "#3d3d3d", image: "/minerals/151_nuummite.webp", messages: ["古老的力量正在甦醒，連結你內在的智慧。", "褐灰色的樸實中藏著彩光，真正的美不需張揚。", "我是地球上最古老的礦石之一，你的拖延症也很資深. . ."] },
-  { name: "鈣沸石 (Scolecite)", theme: "#f5f5f5", image: "/minerals/152_scolecite.webp", messages: ["放射狀的光芒指引方向，相信你的直覺。", "純白的寧靜能帶來內心的平和，放鬆吧。", "我長得像煙火，你的人生也該燦爛一下了. . ."] },
-  { name: "錳柱石 (Serandite)", theme: "#e8a7a7", image: "/minerals/153_serandite.webp", messages: ["玫瑰粉紅的溫柔力量，能化解一切衝突。", "來自加拿大的珍稀，提醒你愛要及時表達。", "我這麼粉嫩，看著你的黑眼圈真的很心疼. . ."] },
-  { name: "板鈦礦 (Brookite)", theme: "#5d4037", image: "/minerals/154_brookite.webp", messages: ["薄板狀的我提醒你：輕薄也能很堅強。", "褐黑色的沉穩中藏著力量，相信自己。", "我是鈦的三兄弟之一，你是拖延三連霸冠軍. . ."] },
-  { name: "銳鈦礦 (Anatase)", theme: "#1a237e", image: "/minerals/155_anatase.webp", messages: ["雙錐形的完美提醒你：追求卓越是值得的。", "深藍黑色的神秘中藏著智慧，探索未知。", "我形狀很尖銳，就像你老闆的眼神. . ."] },
-  { name: "金紅石 (Rutile)", theme: "#b8860b", image: "/minerals/156_rutile.webp", messages: ["金紅色的熱情能點燃創意，現在就行動。", "針狀的我常藏在其他寶石裡，提醒你：配角也能發光。", "我讓鈦晶變得昂貴，你讓老闆變得暴躁. . ."] },
-  { name: "鈣薔薇輝石 (Bustamite)", theme: "#f4a297", image: "/minerals/157_bustamite.webp", messages: ["粉橘色的溫暖能治癒心靈，今天對自己好一點。", "纖維放射的紋理提醒你：從中心向外擴展影響力。", "我的顏色很療癒，可惜治不了你的拖延症. . ."] },
-  { name: "針鈉鈣石 (Pectolite)", theme: "#e0e0e0", image: "/minerals/158_pectolite.webp", messages: ["放射狀的針晶指向各個方向，提醒你保持開放。", "淡雅的白灰色帶來平靜，讓思緒沉澱。", "我的藍色變種是拉利瑪，我們是表親不是同一個. . ."] },
-  { name: "重晶石 (Baryte)", theme: "#b0bec5", image: "/minerals/159_baryte.webp", messages: ["沉重的密度提醒你：有份量才能穩住腳步。", "板狀晶體的層次感，像極了人生的階段。", "我是石油鑽探的好夥伴，你是 deadline 追逐的對象. . ."] },
-  { name: "白鉛礦 (Cerussite)", theme: "#fafafa", image: "/minerals/160_cerussite.webp", messages: ["雪花般的雙晶結構提醒你：複雜中自有美感。", "鑽石般的光澤在白色中閃耀，低調的奢華。", "我的結構像雪花，你的進度像龜爬. . ."] },
-  // 161-170
-  { name: "黑鎢礦 (Wolframite)", theme: "#2f2f2f", image: "/minerals/161_wolframite.webp", messages: ["黑色的堅毅中藏著珍貴，鎢是最堅硬的元素之一。", "板狀晶體的沉穩提醒你：厚積薄發。", "我能做燈絲發光發熱，你卻只會發呆發懶. . ."] },
-  { name: "輝鉬礦 (Molybdenite)", theme: "#708090", image: "/minerals/162_molybdenite.webp", messages: ["銀灰色的金屬光澤中藏著工業的力量。", "片狀的我提醒你：柔軟也是一種智慧。", "我是最好的固體潤滑劑，你是最好的摸魚高手. . ."] },
-  { name: "玉滴石 (Hyalite)", theme: "#e8f5e9", image: "/minerals/163_hyalite.webp", messages: ["透明的純淨能讓思緒清晰，保持初心。", "在紫外線下發出綠色螢光，提醒你：隱藏的才華終會發光。", "我像果凍一樣 Q 彈，你的意志力卻像水一樣軟. . ."] },
-  { name: "摩根石 (Morganite)", theme: "#f8bbd0", image: "/minerals/164_morganite.webp", messages: ["粉紅色的愛情能量正在圍繞著你，敞開心扉。", "祖母綠的粉紅表親提醒你：同一家族也有不同風采。", "我的名字來自 JP 摩根，你的名字來自...算了不重要. . ."] },
-  { name: "氟碳鈰礦 (Bastnäsite)", theme: "#d4a574", image: "/minerals/165_bastnasite.webp", messages: ["稀土元素的寶庫，提醒你：你也藏著無限潛能。", "黃褐色的溫暖中藏著科技的力量。", "我是稀土礦的重要來源，你是摸魚界的重要人才. . ."] },
-  { name: "銀銅氯鉛礦 (Boleite)", theme: "#1a237e", image: "/minerals/166_boleite.webp", messages: ["深藍色的立方體中藏著神秘的化學組成。", "完美的晶形提醒你：細節決定成敗。", "我長成正方體，你圓滾滾的是因為吃太多. . ."] },
-  { name: "角鉛礦 (Phosgenite)", theme: "#fff8e1", image: "/minerals/167_phosgenite.webp", messages: ["淡黃白色的溫柔中藏著剛毅，別小看自己。", "四方晶系的規整提醒你：有條理才能成大事。", "我的成分有鉛，請勿食用，你的懶惰也有毒. . ."] },
-  { name: "香花石 (Hsianghualite)", theme: "#f5f5f5", image: "/minerals/168_hsianghualite.webp", messages: ["中國獨有的礦物，提醒你：獨特是最大的資產。", "無色透明的純淨中藏著家鄉的驕傲。", "我是中國特有的礦物，像你這樣的人才應該也很稀有. . ."] },
-  { name: "黑髮晶 (Tourmalinated Quartz)", theme: "#424242", image: "/minerals/169_tourmalinated_quartz.webp", messages: ["黑白分明的個性提醒你：堅持原則。", "水晶中的黑碧璽針像是命運的線，交織成獨特的你。", "我黑白配很時尚，你黑眼圈配黑咖啡很慘. . ."] },
-  { name: "銫硼鈹石 (Rhodizite)", theme: "#fffde7", image: "/minerals/170_rhodizite.webp", messages: ["最硬的硼酸鹽礦物，提醒你：小巧也能很堅強。", "十二面體的完美晶形中藏著宇宙的奧秘。", "我是放大能量的高手，可惜放大不了你的薪水. . ."] },
-  // 171-180
-  { name: "砷鋅石 (Legrandite)", theme: "#ffeb3b", image: "/minerals/171_legrandite.webp", messages: ["鮮黃色的活力能驅散陰霾，保持樂觀。", "細長的晶體優雅地伸展，提醒你：優雅從容。", "我這麼亮黃，照亮你通往成功的路...如果你願意走的話. . ."] },
-  { name: "磷銅礦 (Libethenite)", theme: "#2e7d32", image: "/minerals/172_libethenite.webp", messages: ["深橄欖綠色的沉穩能帶來平衡，專注於當下。", "銅的氧化物提醒你：轉變也是一種成長。", "我的綠色很深邃，像你欠的稿債一樣深. . ."] },
-  { name: "軟錳礦 (Pyrolusite)", theme: "#37474f", image: "/minerals/173_pyrolusite.webp", messages: ["針狀放射的紋理指向各個方向，保持開放的心。", "鋼灰黑色的工業感提醒你：實用也是一種美。", "我長得像刺蝟，提醒你別碰我，快去工作. . ."] },
-  { name: "輝鉍礦 (Bismuthinite)", theme: "#607d8b", image: "/minerals/174_bismuthinite.webp", messages: ["鉛灰色的金屬光澤中藏著內斂的光芒。", "柱狀晶體的筆直提醒你：方向明確才能前進。", "我是鉍的硫化物，你是懶惰的進化版. . ."] },
-  { name: "銅藍 (Covellite)", theme: "#3f51b5", image: "/minerals/175_covellite.webp", messages: ["靛藍色的彩虹光芒提醒你：平凡中藏著驚喜。", "薄板狀的我提醒你：輕盈也是一種力量。", "我有彩虹般的光芒，你有熬夜後的紅血絲. . ."] },
-  { name: "硫砷銅礦 (Enargite)", theme: "#263238", image: "/minerals/176_enargite.webp", messages: ["灰黑色的金屬感中藏著力量，相信自己。", "柱狀晶體的堅毅提醒你：挺直腰桿面對挑戰。", "我含有砷，有毒，就像你的拖延習慣. . ."] },
-  { name: "砷黝銅礦 (Tennantite)", theme: "#37474f", image: "/minerals/177_tennantite.webp", messages: ["四面體的完美幾何中藏著數學的美。", "灰黑色的深沉提醒你：沉穩是智慧的表現。", "我和黝銅礦長得很像，你和工作狂長得不像. . ."] },
-  { name: "黝銅礦 (Tetrahedrite)", theme: "#455a64", image: "/minerals/178_tetrahedrite.webp", messages: ["四面體的名字來自希臘文，提醒你：探索語言的奧秘。", "鋼灰色的金屬光澤中藏著內斂的美。", "我是砷黝銅礦的表親，你是摸魚王的傳人. . ."] },
-  { name: "車輪礦 (Bournonite)", theme: "#546e7a", image: "/minerals/179_bournonite.webp", messages: ["輪狀雙晶的獨特提醒你：與眾不同是禮物。", "鋼灰色的齒輪造型提醒你：每個零件都重要。", "我長得像齒輪，提醒你該轉動起來了. . ."] },
-  { name: "黃錫礦 (Stannite)", theme: "#78909c", image: "/minerals/180_stannite.webp", messages: ["錫的硫化物提醒你：古老的元素也有現代的價值。", "假八面體的晶形中藏著幾何的美。", "我含有錫銅鐵鋅，你含有懶惰拖延和藉口. . ."] },
-  // 181-190
-  { name: "硫銻銅銀礦 (Polybasite)", theme: "#212121", image: "/minerals/181_polybasite.webp", messages: ["薄板狀的黑色中藏著銀的珍貴。", "六角形的輪廓提醒你：規律中也有變化。", "我含有銀，你含有...滿滿的疲憊. . ."] },
-  { name: "淡紅銀礦 (Proustite)", theme: "#e53935", image: "/minerals/182_proustite.webp", messages: ["硃紅色的熱情能點燃創意，現在就開始。", "光敏感的我提醒你：保護珍貴的事物。", "我見光會變暗，你見工作會想逃. . ."] },
-  { name: "深紅銀礦 (Pyrargyrite)", theme: "#b71c1c", image: "/minerals/183_pyrargyrite.webp", messages: ["深紅色的沉穩中藏著熱情，內斂而強大。", "銀的硫化物提醒你：表面之下有更多可能。", "我比淡紅銀礦更深沉，你的拖延比我更嚴重. . ."] },
-  { name: "脆銀礦 (Stephanite)", theme: "#1a1a1a", image: "/minerals/184_stephanite.webp", messages: ["鐵黑色的堅毅中藏著銀的光芒。", "短柱狀的晶體提醒你：精悍也是一種美。", "我以礦物學家命名，你只有 deadline 會記住你. . ."] },
-  { name: "螺狀硫銀礦 (Acanthite)", theme: "#424242", image: "/minerals/185_acanthite.webp", messages: ["鉛灰色的外表下是純銀的本質，不要被表象迷惑。", "假立方體的晶形提醒你：變通也是能力。", "我是銀礦石的重要來源，你是摸魚界的重要來源. . ."] },
-  { name: "硫銅銀礦 (Stromeyerite)", theme: "#616161", image: "/minerals/186_stromeyerite.webp", messages: ["銅銀的結合提醒你：合作能創造更多可能。", "深鋼灰色的沉穩中藏著兩種金屬的力量。", "我同時含有銅和銀，你同時含有懶和拖. . ."] },
-  { name: "方鈷礦 (Skutterudite)", theme: "#eceff1", image: "/minerals/187_skutterudite.webp", messages: ["錫白色的光澤中藏著鈷的力量。", "立方體和八面體的結合提醒你：多元是美的。", "我來自挪威，你來自...沙發上. . ."] },
-  { name: "輝砷鎳礦 (Gersdorffite)", theme: "#cfd8dc", image: "/minerals/188_gersdorffite.webp", messages: ["銀白色的低調中藏著鎳的力量。", "立方晶系的規整提醒你：有條理才能成功。", "我含有砷鎳硫，你含有睡意疲憊和咖啡因. . ."] },
-  { name: "輝砷鈷礦 (Cobaltite)", theme: "#f8bbd0", image: "/minerals/189_cobaltite.webp", messages: ["銀白帶粉紅的獨特提醒你：接受自己的與眾不同。", "假立方體的晶形中藏著幾何的美。", "我含有鈷，是藍色顏料的來源，你是藍色憂鬱的來源. . ."] },
-  { name: "毒砂 (Arsenopyrite)", theme: "#90a4ae", image: "/minerals/190_arsenopyrite.webp", messages: ["銀白色的金屬光澤中藏著力量，但也要小心。", "柱狀晶體的挺拔提醒你：站直了才能看得更遠。", "我有毒，你的拖延習慣也有毒. . ."] },
-  // 191-200
-  { name: "白鐵礦 (Marcasite)", theme: "#c9b037", image: "/minerals/191_marcasite.webp", messages: ["淺黃銅色的光芒中藏著古老的美。", "雞冠狀的晶形提醒你：展現你的獨特風采。", "我和黃鐵礦是同分異構體，你和準時是平行宇宙. . ."] },
-  { name: "斜方砷鐵礦 (Löllingite)", theme: "#e0e0e0", image: "/minerals/192_lollingite.webp", messages: ["銀白色的光澤中藏著力量，相信自己。", "柱狀晶體的堅毅提醒你：堅持下去。", "我的名字很難念，就像你的藉口很難聽. . ."] },
-  { name: "紅砷鎳礦 (Nickeline)", theme: "#bf360c", image: "/minerals/193_nickeline.webp", messages: ["淺銅紅色的溫暖提醒你：金屬也有溫度。", "塊狀的外形提醒你：質樸也是一種美。", "我是最早發現的鎳礦物，你是最晚交稿的人類. . ."] },
-  { name: "紅銻鎳礦 (Breithauptite)", theme: "#d84315", image: "/minerals/194_breithauptite.webp", messages: ["淺銅紅色的獨特提醒你：稀有就是價值。", "薄板狀的我提醒你：輕薄也能有力量。", "我含有銻和鎳，你含有藉口和拖延. . ."] },
-  { name: "針鎳礦 (Millerite)", theme: "#ffc107", image: "/minerals/195_millerite.webp", messages: ["極細針狀的我提醒你：纖細也能很堅韌。", "黃銅色的光芒中藏著鎳的力量。", "我像刺蝟的針，你像蟲一樣蠕動到 deadline. . ."] },
-  { name: "鎳黃鐵礦 (Pentlandite)", theme: "#ffb300", image: "/minerals/196_pentlandite.webp", messages: ["淺銅黃色的溫暖中藏著工業的力量。", "塊狀的低調提醒你：默默耕耘也是偉大的。", "我是主要的鎳礦石，你是主要的拖延製造機. . ."] },
-  { name: "紫硫鎳鐵礦 (Violarite)", theme: "#7b1fa2", image: "/minerals/197_violarite.webp", messages: ["紫灰色的神秘中藏著深度，探索未知。", "塊狀的沉穩提醒你：穩扎穩打。", "我的名字有 viola 是紫色的意思，你的臉色快變紫了. . ."] },
-  { name: "硫鎳鈷礦 (Siegenite)", theme: "#757575", image: "/minerals/198_siegenite.webp", messages: ["鋼灰色的堅毅中藏著兩種金屬的力量。", "八面體的完美幾何提醒你：追求卓越。", "我含有鎳和鈷，你含有咖啡和眼袋. . ."] },
-  { name: "硫鈷礦 (Linnaeite)", theme: "#e0e0e0", image: "/minerals/199_linnaeite.webp", messages: ["銀白色的純淨中藏著鈷的力量。", "八面體的晶形提醒你：規律中也有美。", "我以林奈命名，分類學之父，你需要把拖延分類到垃圾桶. . ."] },
-  { name: "硫銅鈷礦 (Carrollite)", theme: "#b0bec5", image: "/minerals/200_carrollite.webp", messages: ["淺鋼灰色的低調中藏著三種金屬的力量。", "八面體的晶形提醒你：多元組合創造獨特。", "恭喜你抽到了第兩百號礦石！現在，快點去工作吧！"] },
+// ============================================
+// 🍜 世界美食圖鑑 - World Food Encyclopedia
+// ============================================
+
+const items = [
+  // 1. 日本 - 壽司
+  {
+    name: "壽司 (Sushi)",
+    theme: "#e11d48",
+    image: "/items/01-sushi.webp",
+    description: `壽司，這道享譽全球的日本料理，其歷史可追溯至西元前四世紀的東南亞。最初的壽司並非我們今日所見的模樣，而是一種將魚肉與米飯層層堆疊、發酵保存的古老技法，稱為「熟壽司」。經過數月的乳酸發酵，米飯會變得粘稠而酸，魚肉則獲得獨特的風味與延長的保存期限。
+
+這道料理隨著稻作文化的傳播，於西元八世紀傳入日本。到了江戶時代（1603-1868），一位名叫華屋與兵衛的料理人進行了革命性的創新——他將新鮮的生魚片直接覆蓋在醋飯上，創造出「握壽司」，徹底改變了壽司的面貌。
+
+正統的壽司製作極為講究：米飯需使用特定品種的短粒米，煮熟後拌入由米醋、糖、鹽調製的「壽司醋」；魚料的選擇與熟成同樣重要，頂級的鮪魚腹肉需經過恰當的熟成才能展現其油脂的醇厚。一位壽司職人的養成往往需要十年以上的修行，單是煮飯一項技藝就需要三年時間精通。`
+  },
+  // 2. 義大利 - 披薩
+  {
+    name: "披薩 (Pizza)",
+    theme: "#f97316",
+    image: "/items/02-pizza.webp",
+    description: `披薩的起源可追溯至古代地中海文明。希臘人、埃及人與羅馬人都有在扁平麵餅上放置橄欖油與香料的飲食習慣。然而，現代披薩的誕生地無疑是義大利南部的那不勒斯。
+
+十六世紀，番茄從美洲傳入歐洲後，那不勒斯的窮苦階層開始將這種當時被視為有毒的「金蘋果」鋪在麵餅上食用。這種街頭小食逐漸演變為我們熟知的披薩。1889年，那不勒斯披薩師傅拉斐爾·埃斯波西托為了紀念義大利王后瑪格麗特的來訪，創造了一款以紅色番茄、白色莫札瑞拉起司、綠色羅勒葉裝飾的披薩——正是義大利國旗的三色。這款披薩被命名為「瑪格麗特披薩」，至今仍是最經典的口味。
+
+傳統的那不勒斯披薩有著嚴格的規範：麵團必須以高筋麵粉、水、鹽和酵母製作，經過至少八小時的發酵；烤製則需使用攝氏四百八十五度的柴燒窯爐，僅需六十至九十秒即可完成。2017年，那不勒斯披薩的製作技藝被聯合國教科文組織列為人類非物質文化遺產。`
+  },
+  // 3. 墨西哥 - 塔可
+  {
+    name: "塔可 (Taco)",
+    theme: "#eab308",
+    image: "/items/03-taco.webp",
+    description: `塔可，這道墨西哥的國民美食，其歷史與玉米的馴化密不可分。考古學證據顯示，早在西元前七千年，中美洲的原住民就已經開始種植玉米。阿茲特克人將磨碎的玉米糊製成薄餅，稱為「托爾蒂亞」(Tortilla)，這便是塔可的前身。
+
+「Taco」一詞的確切起源眾說紛紜。一種說法認為它來自納瓦特爾語的「tlahco」，意為「半邊」或「在中間」，形容折疊的形狀。另一種有趣的說法則與十八世紀墨西哥銀礦有關——礦工們使用小張紙包裹火藥來爆破岩石，這種紙包被稱為「taco」，後來街頭小販開始用類似的方式包裹食物，這個名稱便延續下來。
+
+傳統的墨西哥街頭塔可與美式塔可截然不同。正宗的玉米薄餅是以石灰水處理過的玉米（稱為「尼克斯塔瑪化」處理）磨成的麵團製作，這個古老的工序不僅能釋放玉米中的菸鹼酸，還能賦予獨特的風味。配料通常選用燉煮的豬肉、牛舌、或是以辣椒與香料醃製的肉類，佐以新鮮的洋蔥丁、芫荽葉與萊姆汁。`
+  },
+  // 4. 泰國 - 打拋豬
+  {
+    name: "打拋豬 (Pad Kra Pao)",
+    theme: "#22c55e",
+    image: "/items/04-pad-kra-pao.webp",
+    description: `打拋豬，泰語稱為「Pad Kra Pao Moo」，是泰國最具代表性的家常料理之一。這道看似簡單的快炒菜餚，實則蘊含著泰國料理的精髓——酸、甜、鹹、辣四味的完美平衡。
+
+「Kra Pao」指的是打拋葉，一種與甜羅勒截然不同的泰國聖羅勒。這種草本植物在泰國傳統醫學中被視為神聖之物，據說能驅邪避凶、淨化身心。打拋葉帶有獨特的胡椒與丁香混合的香氣，加熱後會釋放出濃郁的芳香，是這道料理不可替代的靈魂。
+
+傳統的打拋豬製作講究「鑊氣」——需要使用高溫的炒鍋，在極短的時間內完成烹調。首先將大蒜與朝天椒以杵臼搗碎（而非切碎），讓其釋放出更濃郁的風味；接著在滾燙的油鍋中爆香，加入肉末快速翻炒，最後加入魚露、蠔油、糖及大把的打拋葉。上桌時必須配上一顆荷包蛋，蛋黃流淌在米飯上，與辛香的肉末交融，這便是泰國人心中最療癒的滋味。這道菜在泰國街頭隨處可見，價格親民，卻是連頂級餐廳都難以完美複製的庶民美食。`
+  },
+  // 5. 法國 - 可頌
+  {
+    name: "可頌 (Croissant)",
+    theme: "#d4a574",
+    image: "/items/05-croissant.webp",
+    description: `可頌，這款彎月形的酥皮麵包，其身世充滿了浪漫的傳說。最廣為流傳的故事發生在1683年的維也納——當時鄂圖曼土耳其帝國圍攻這座城市，據說是維也納的麵包師傅們在深夜聽到了土耳其軍隊挖掘地道的聲響，及時發出警報，拯救了整座城市。為了慶祝勝利，他們創作了這款模仿土耳其國旗上新月圖案的麵包。
+
+然而，歷史學家對此說法多持保留態度。較為可信的記載顯示，可頌是1839年由奧地利企業家奧古斯特·湯恩在巴黎開設的「維也納麵包房」引入法國的。最初的版本只是普通的酵母麵包，直到二十世紀初，法國的麵包師傅們才發展出今日我們熟知的千層酥皮製法。
+
+正統的可頌製作是一門精密的工藝。麵團需經過至少三次的「折疊」，每次將奶油包裹其中，然後擀平、折疊、冷藏。這個程序會產生二十七層交替的麵皮與奶油。在高溫烤製時，奶油中的水分蒸發，將層層麵皮撐開，形成獨特的蜂窩狀結構。一個理想的可頌應該具備深琥珀色的酥脆外殼、如羽毛般輕盈的內裡，以及純正奶油的濃郁香氣。`
+  },
+  // 6. 印度 - 咖哩
+  {
+    name: "咖哩 (Curry)",
+    theme: "#ca8a04",
+    image: "/items/06-curry.webp",
+    description: `「咖哩」一詞的起源本身就是一段殖民歷史的縮影。這個詞來自泰米爾語的「kari」，意為「醬汁」或「燉菜」。當十七世紀英國東印度公司的商人與士兵來到印度次大陸時，他們用這個詞籠統地稱呼所有帶有濃郁醬汁的印度料理——儘管在印度本土，從未有過一道菜直接叫做「咖哩」。
+
+印度料理的精髓在於「瑪莎拉」(Masala)——香料的混合藝術。每個家庭、每個地區都有自己獨特的香料配方，可能包含薑黃、芫荽籽、孜然、肉桂、丁香、小豆蔻、黑胡椒等數十種香料。這些香料不僅提供風味，在阿育吠陀醫學傳統中，更被認為具有療癒身體、平衡體質的功效。
+
+值得一提的是，「咖哩粉」這個概念其實是英國人的發明。十八世紀，返回英國的殖民者渴望重現印度的風味，於是商人們將多種香料預先混合成便利的粉末出售。這種簡化的版本隨後傳播到世界各地，在日本演變為溫醇甘甜的國民美食，在泰國與椰奶結合成為芳香四溢的綠咖哩、紅咖哩，在馬來西亞則與在地食材融合，創造出獨具特色的咖哩叻沙。`
+  },
+  // 7. 韓國 - 烤肉
+  {
+    name: "韓式烤肉 (Korean BBQ)",
+    theme: "#dc2626",
+    image: "/items/07-korean-bbq.webp",
+    description: `韓式烤肉的歷史可追溯至高句麗時代（西元前37年至西元668年）的「貊炙」——一種將肉類串起在火上燒烤的料理方式。然而，現代韓式烤肉的雛形真正成形於朝鮮時代（1392-1897），當時的宮廷料理中就已經出現了以醬油、糖、芝麻油、大蒜醃製牛肉的「不高基」（Bulgogi，意為「火肉」）。
+
+韓式烤肉之所以獨特，在於它將烹飪過程本身轉變為一種社交儀式。圍坐在嵌有烤爐的餐桌旁，食客們親手翻烤肉片，肉的滋滋聲響、升騰的煙霧、撲鼻的香氣，都成為用餐體驗不可分割的一部分。這種互動式的用餐方式強調的是「情」——韓國文化中人與人之間深厚的情感聯繫。
+
+烤肉的配角同樣不可忽視：將烤好的肉片包裹在新鮮的生菜葉中，佐以蒜片、青辣椒、包飯醬（ssamjang），再配上種類繁多的小菜——醃蘿蔔、涼拌豆芽、炒魚板、泡菜——這才是完整的韓式烤肉體驗。許多傳統餐廳至今仍使用木炭燒烤，他們堅信只有木炭的火候才能賦予肉品獨特的煙燻風味與恰到好處的焦香。`
+  },
+  // 8. 越南 - 河粉
+  {
+    name: "河粉 (Pho)",
+    theme: "#84cc16",
+    image: "/items/08-pho.webp",
+    description: `河粉的誕生是東西飲食文化碰撞的結晶。十九世紀末至二十世紀初，法國殖民統治下的越南北部，法國人對牛肉的大量需求改變了當地的飲食生態。越南廚師們開始利用法國人不吃的牛骨熬製湯底，並與中國南方移民帶來的河粉結合，創造出這道獨具特色的料理。「Pho」這個名稱據說源自法語的「pot-au-feu」（火上鍋，一種法式燉菜），也有說法認為它來自廣東話的「粉」。
+
+河粉的靈魂在於那碗清亮卻風味濃郁的湯頭。傳統的製法需要將牛骨以小火慢燉至少八小時，期間不斷撇去浮沫以保持湯色澄澈。香料的運用極為關鍵：八角、桂皮、丁香、芫荽籽、小茴香——這些香料需先經過乾鍋烘烤以激發香氣，然後裝入布袋中與牛骨同煮。成品的湯頭應該清澈見底，卻蘊含著層次分明的滋味。
+
+越南南北兩地的河粉風格截然不同。北方河粉（源自河內）講究質樸，湯頭清淡，配料簡單，僅以蔥花和芫荽點綴；南方河粉（盛行於西貢）則口味較甜，會額外附上滿滿一盤新鮮香草、豆芽、辣椒與檸檬，供食客自行調配。這種南北差異至今仍是越南人津津樂道的文化話題。`
+  },
 ];
 
 import { useMagicalSounds } from "@/hooks/use-magical-sounds";
 import { Play, ChevronUp, ChevronDown } from "lucide-react";
 
 export default function Home() {
-  const [selectedMineral, setSelectedMineral] = useState(minerals[41]);
-  const [selectedMessage, setSelectedMessage] = useState(minerals[41].messages[0]);
+  const [selectedItem, setSelectedItem] = useState(items[0]);
   const [isSpinning, setIsSpinning] = useState(false);
   const [isHistoryExpanded, setIsHistoryExpanded] = useState(false);
-  const [history, setHistory] = useState<{ mineral: typeof minerals[0], message: string, soundIndex: number }[]>([]);
+  const [history, setHistory] = useState<{ item: typeof items[0], soundIndex: number }[]>([]);
 
   const { playNote, playSequence } = useMagicalSounds();
 
   const drawFortune = () => {
     setIsSpinning(true);
     setTimeout(() => {
-      const randomMineral = minerals[Math.floor(Math.random() * minerals.length)];
-      const randomMsgIndex = Math.floor(Math.random() * 3);
-      const message = randomMineral.messages[randomMsgIndex];
+      const randomItem = items[Math.floor(Math.random() * items.length)];
 
-      setSelectedMineral(randomMineral);
-      setSelectedMessage(message);
+      setSelectedItem(randomItem);
 
       const seedIndex = playNote();
-      setHistory(prev => [{ mineral: randomMineral, message, soundIndex: seedIndex }, ...prev]);
+      setHistory(prev => [{ item: randomItem, soundIndex: seedIndex }, ...prev]);
 
       setIsSpinning(false);
     }, 1000);
   };
 
-  const restoreHistory = (item: { mineral: typeof minerals[0], message: string }) => {
+  const restoreHistory = (historyItem: { item: typeof items[0] }) => {
     if (isSpinning) return;
-    setSelectedMineral(item.mineral);
-    setSelectedMessage(item.message);
+    setSelectedItem(historyItem.item);
   };
 
   return (
@@ -275,7 +141,7 @@ export default function Home() {
       <div
         className="absolute inset-0 transition-colors duration-1000 -z-10"
         style={{
-          background: `radial-gradient(circle at 50% 50%, ${selectedMineral.theme}15 0%, #09090b 80%)`
+          background: `radial-gradient(circle at 50% 50%, ${selectedItem.theme}15 0%, #09090b 80%)`
         }}
       />
 
@@ -284,7 +150,7 @@ export default function Home() {
           <div className="w-6 h-6 rounded bg-white flex items-center justify-center">
             <Sparkles className="w-4 h-4 text-black" />
           </div>
-          <h1 className="font-black tracking-tight text-sm">LITHOS</h1>
+          <h1 className="font-black tracking-tight text-sm">世界美食圖鑑</h1>
         </div>
         <div className="flex items-center gap-3">
           <Github className="w-4 h-4 text-zinc-600" />
@@ -295,7 +161,7 @@ export default function Home() {
       <main className="flex-1 flex flex-col md:flex-row items-center justify-center p-6 gap-8 md:gap-16 min-h-0">
         <div className="relative shrink-0 flex items-center justify-center">
           <motion.div
-            key={selectedMineral.name}
+            key={selectedItem.name}
             animate={{
               rotate: isSpinning ? 360 : 0,
               scale: isSpinning ? 0.8 : 1
@@ -306,16 +172,16 @@ export default function Home() {
             <div
               className="w-48 h-48 md:w-80 md:h-80 rounded-3xl glass-panel flex items-center justify-center animate-float relative overflow-hidden"
               style={{
-                boxShadow: `0 0 60px ${selectedMineral.theme}33`,
-                background: `linear-gradient(135deg, ${selectedMineral.theme}44 0%, transparent 100%)`
+                boxShadow: `0 0 60px ${selectedItem.theme}33`,
+                background: `linear-gradient(135deg, ${selectedItem.theme}44 0%, transparent 100%)`
               }}
             >
-              <div className="w-full h-full absolute inset-0 blur-2xl opacity-20" style={{ backgroundColor: selectedMineral.theme }} />
-              {selectedMineral.image ? (
+              <div className="w-full h-full absolute inset-0 blur-2xl opacity-20" style={{ backgroundColor: selectedItem.theme }} />
+              {selectedItem.image ? (
                 <div className="relative w-full h-full p-2">
                   <Image
-                    src={selectedMineral.image}
-                    alt={selectedMineral.name}
+                    src={selectedItem.image}
+                    alt={selectedItem.name}
                     fill
                     className="object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.3)] filter contrast-125 saturate-110"
                     priority
@@ -333,12 +199,12 @@ export default function Home() {
         </div>
 
         <div className="flex flex-col gap-6 w-full max-w-lg shrink min-h-0">
-          <div className="glass-panel rounded-2xl p-6 md:p-8 space-y-4 relative overflow-hidden flex flex-col">
+          <div className="glass-panel rounded-2xl p-6 md:p-8 space-y-4 relative overflow-hidden flex flex-col max-h-[50vh] md:max-h-[60vh]">
             <div className="space-y-1">
-              <span className="text-[10px] font-black tracking-[0.3em] text-zinc-500 uppercase">Current Gem</span>
+              <span className="text-[10px] font-black tracking-[0.3em] text-zinc-500 uppercase">今日美食</span>
               <h2 className="text-xl md:text-3xl font-bold font-serif text-white truncate flex items-center justify-center sm:justify-start">
                 {(() => {
-                  const parts = selectedMineral.name.split(' (');
+                  const parts = selectedItem.name.split(' (');
                   if (parts.length === 2) {
                     return (
                       <>
@@ -349,26 +215,34 @@ export default function Home() {
                       </>
                     );
                   }
-                  return <span>{selectedMineral.name}</span>;
+                  return <span>{selectedItem.name}</span>;
                 })()}
               </h2>
             </div>
 
-            <div className="flex-1 min-h-[100px] flex items-center">
+            <div className="flex-1 overflow-y-auto custom-scrollbar">
               <AnimatePresence mode="wait">
                 {!isSpinning ? (
-                  <motion.p
-                    key={selectedMessage}
+                  <motion.div
+                    key={selectedItem.name}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-lg md:text-2xl font-medium leading-relaxed text-zinc-200"
+                    className="text-sm md:text-base leading-relaxed text-zinc-300 whitespace-pre-line"
                   >
-                    "{selectedMessage}"
-                  </motion.p>
+                    {selectedItem.description.split('\n\n').map((paragraph, index) => (
+                      <p key={index} className="mb-4 last:mb-0 text-justify">
+                        {paragraph}
+                      </p>
+                    ))}
+                  </motion.div>
                 ) : (
-                  <div className="w-full space-y-2">
+                  <div className="w-full space-y-3">
+                    <div className="h-4 bg-white/5 rounded w-full animate-pulse" />
+                    <div className="h-4 bg-white/5 rounded w-11/12 animate-pulse" />
                     <div className="h-4 bg-white/5 rounded w-full animate-pulse" />
                     <div className="h-4 bg-white/5 rounded w-3/4 animate-pulse" />
+                    <div className="h-4 bg-white/5 rounded w-full animate-pulse" />
+                    <div className="h-4 bg-white/5 rounded w-5/6 animate-pulse" />
                   </div>
                 )}
               </AnimatePresence>
@@ -385,7 +259,7 @@ export default function Home() {
             "
           >
             {isSpinning ? <RefreshCw className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
-            <span>{isSpinning ? "感知中..." : "獲取今日指引"}</span>
+            <span>{isSpinning ? "探索中..." : "隨機探索"}</span>
             <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-orange-400 via-purple-500 to-blue-500 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
           </button>
 
@@ -418,7 +292,7 @@ export default function Home() {
         >
           <div className="flex items-center gap-2">
             <HistoryIcon size={12} className="text-zinc-500 group-hover:text-zinc-300" />
-            <span className="text-[10px] font-black tracking-widest text-zinc-500 group-hover:text-zinc-300 uppercase">Collection ({history.length})</span>
+            <span className="text-[10px] font-black tracking-widest text-zinc-500 group-hover:text-zinc-300 uppercase">探索紀錄 ({history.length})</span>
           </div>
           {isHistoryExpanded ? <ChevronDown size={14} className="text-zinc-500" /> : <ChevronUp size={14} className="text-zinc-500" />}
         </button>
@@ -433,20 +307,20 @@ export default function Home() {
             >
               <div className="flex flex-wrap content-start gap-2 pb-4 max-h-[30vh] overflow-y-auto custom-scrollbar">
                 <div className="flex flex-wrap content-start gap-2 pb-2">
-                  {history.length > 0 ? history.map((item, i) => (
+                  {history.length > 0 ? history.map((historyItem, i) => (
                     <motion.div
                       initial={{ scale: 0, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
-                      key={`${item.mineral.name}-${i}`}
-                      onClick={() => restoreHistory(item)}
+                      key={`${historyItem.item.name}-${i}`}
+                      onClick={() => restoreHistory(historyItem)}
                       layout
                       className="pl-1.5 pr-3 py-1.5 rounded-full bg-white/5 border border-white/5 flex items-center gap-2 cursor-pointer hover:bg-white/10 hover:border-white/20 transition-all group"
                     >
                       <div className="relative w-8 h-8 rounded-full overflow-hidden bg-black/40 ring-1 ring-white/10 group-hover:ring-white/30 transition-all">
-                        {item.mineral.image && (
+                        {historyItem.item.image && (
                           <Image
-                            src={item.mineral.image}
-                            alt={item.mineral.name}
+                            src={historyItem.item.image}
+                            alt={historyItem.item.name}
                             fill
                             className="object-cover"
                             sizes="32px"
@@ -455,13 +329,13 @@ export default function Home() {
                       </div>
                       <div className="flex flex-col">
                         <span className="text-[10px] font-bold text-zinc-400 group-hover:text-zinc-200 whitespace-nowrap uppercase leading-none transition-colors">
-                          {item.mineral.name.split(' ')[0]}
+                          {historyItem.item.name.split(' ')[0]}
                         </span>
                       </div>
                     </motion.div>
                   )) : (
                     <div className="w-full flex justify-center py-4">
-                      <span className="text-[10px] text-zinc-800 font-bold uppercase tracking-widest italic">Waiting for your first draw...</span>
+                      <span className="text-[10px] text-zinc-800 font-bold uppercase tracking-widest italic">等待您的第一次探索...</span>
                     </div>
                   )}
                 </div>
