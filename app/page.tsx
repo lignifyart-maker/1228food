@@ -105,6 +105,7 @@ const items = [
 
 越南南北兩地的河粉風格截然不同。北方河粉（源自河內）講究質樸，湯頭清淡，配料簡單，僅以蔥花和芫荽點綴；南方河粉（盛行於西貢）則口味較甜，會額外附上滿滿一盤新鮮香草、豆芽、辣椒與檸檬，供食客自行調配。這種南北差異至今仍是越南人津津樂道的文化話題。`
   },
+  ...newItems
 ];
 
 import { useMagicalSounds } from "@/hooks/use-magical-sounds";
@@ -138,7 +139,7 @@ export default function Home() {
   };
 
   return (
-    <div className="relative h-[100dvh] flex flex-col overflow-hidden bg-[#09090b] text-white">
+    <div className="relative h-[100dvh] flex flex-col overflow-hidden bg-[#09090b] text-white" >
       <div
         className="absolute inset-0 transition-colors duration-1000 -z-10"
         style={{
@@ -345,6 +346,6 @@ export default function Home() {
           )}
         </AnimatePresence>
       </footer>
-    </div>
+    </div >
   );
 }
