@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>世界美食圖鑑 - 長描述版 (101-200)</title>
+    <title>世界美食圖鑑 - 長描述版 (201-300)</title>
     <style>
         * {
             margin: 0;
@@ -24,7 +24,7 @@
             text-align: center;
             margin-bottom: 20px;
             font-size: 2.5rem;
-            background: linear-gradient(90deg, #f97316, #e11d48, #8b5cf6);
+            background: linear-gradient(90deg, #22c55e, #0ea5e9, #8b5cf6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -86,7 +86,7 @@
 
         .card-number {
             display: inline-block;
-            background: linear-gradient(135deg, #f97316, #e11d48);
+            background: linear-gradient(135deg, #22c55e, #0ea5e9);
             color: white;
             padding: 2px 6px;
             border-radius: 10px;
@@ -155,7 +155,7 @@
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 5px;
-            color: #f97316;
+            color: #22c55e;
             font-size: 0.6rem;
             cursor: pointer;
             transition: all 0.2s;
@@ -163,7 +163,7 @@
 
         .toggle-btn:hover {
             background: rgba(255, 255, 255, 0.15);
-            border-color: #f97316;
+            border-color: #22c55e;
         }
 
         .footer {
@@ -189,35 +189,53 @@
         }
 
         .nav-links a:hover {
-            color: #f97316;
-            border-color: #f97316;
+            color: #22c55e;
+            border-color: #22c55e;
         }
 
         .nav-links a.active {
-            background: linear-gradient(135deg, #f97316, #e11d48);
+            background: linear-gradient(135deg, #22c55e, #0ea5e9);
             color: white;
             border-color: transparent;
+        }
+
+        @media (max-width: 1200px) {
+            .grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
 
 <body>
-    <h1>🍜 世界美食圖鑑</h1>
-    <p class="subtitle">World Food Encyclopedia - 收錄 #101-200 世界美食（長描述版）</p>
+    <h1>🍽️ 世界美食圖鑑</h1>
+    <p class="subtitle">World Food Encyclopedia - 收錄 #201-300 世界美食（長描述版）</p>
 
     <nav class="nav-links">
         <a href="check001_100.html">1-100</a>
-        <a href="check101_200.html" class="active">101-200</a>
-        <a href="check201_300.html">201-300</a>
+        <a href="check101_200.html">101-200</a>
+        <a href="check201_300.html" class="active">201-300</a>
     </nav>
 
     <div class="grid" id="food-grid"></div>
 
     <footer class="footer">
-        <p>世界美食圖鑑 © 2024 | 共收錄 200 種世界美食</p>
+        <p>世界美食圖鑑 © 2024 | 共收錄 210 種世界美食（持續擴增中）</p>
     </footer>
 
-    <script src="check-items-data.js"></script>
+    <script src="check-items-data-201-300.js"></script>
     <script>
         function toggleDescription(index) {
             const desc = document.getElementById('desc-' + index);
@@ -234,7 +252,7 @@
 
         const grid = document.getElementById('food-grid');
 
-        items.forEach((item, index) => {
+        items201to300.forEach((item, index) => {
             const card = document.createElement('div');
             card.className = 'card';
 

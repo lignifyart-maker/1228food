@@ -11,6 +11,7 @@ import { items51to100 } from "@/data/items-51-100";
 import { items101to150 } from "@/data/items-101-150";
 import { items151to200 } from "@/data/items-151-200";
 import { items171to200 } from "@/data/items-171-200";
+import { items201to250 } from "@/data/items-201-250";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -112,7 +113,8 @@ const items = [
   ...newItems,
   ...items51to100,
   ...items101to150,
-  ...items151to200
+  ...items151to200,
+  ...items201to250
 ];
 
 import { useMagicalSounds } from "@/hooks/use-magical-sounds";

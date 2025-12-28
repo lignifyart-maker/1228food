@@ -173,12 +173,44 @@
             color: #555;
             font-size: 0.9rem;
         }
+
+        .nav-links {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .nav-links a {
+            color: #888;
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #f97316;
+            border-color: #f97316;
+        }
+
+        .nav-links a.active {
+            background: linear-gradient(135deg, #f97316, #e11d48);
+            color: white;
+            border-color: transparent;
+        }
     </style>
 </head>
 
 <body>
     <h1>🍜 世界美食圖鑑</h1>
-    <p class="subtitle">World Food Encyclopedia - 完整收錄 100 道世界美食</p>
+    <p class="subtitle">World Food Encyclopedia - 收錄 #1-100 世界美食（長描述版）</p>
+
+    <nav class="nav-links">
+        <a href="check001_100.html" class="active">1-100</a>
+        <a href="check101_200.html">101-200</a>
+        <a href="check201_300.html">201-300</a>
+    </nav>
 
     <div class="grid" id="food-grid"></div>
 
