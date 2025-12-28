@@ -111,7 +111,8 @@ const items = [
   },
   ...newItems,
   ...items51to100,
-  ...items101to150
+  ...items101to150,
+  ...items151to200
 ];
 
 import { useMagicalSounds } from "@/hooks/use-magical-sounds";
