@@ -2,17 +2,17 @@ import sharp from 'sharp';
 import fs from 'fs';
 import path from 'path';
 
-const mineralsDir = './public/minerals';
+const itemsDir = './public/items';
 
 async function convertToWebP() {
-    const files = fs.readdirSync(mineralsDir);
+    const files = fs.readdirSync(itemsDir);
     const pngFiles = files.filter(f => f.endsWith('.png'));
 
     console.log(`Found ${pngFiles.length} PNG files to convert`);
 
     for (const file of pngFiles) {
-        const inputPath = path.join(mineralsDir, file);
-        const outputPath = path.join(mineralsDir, file.replace('.png', '.webp'));
+        const inputPath = path.join(itemsDir, file);
+        const outputPath = path.join(itemsDir, file.replace('.png', '.webp'));
 
         try {
             await sharp(inputPath)

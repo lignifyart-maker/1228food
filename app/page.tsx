@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -6,6 +6,7 @@ import { Sparkles, RefreshCw, Quote, Github, Info, Share2, History as HistoryIco
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import Image from "next/image";
+import { newItems } from "@/data/new-items";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
