@@ -9,6 +9,8 @@ import Image from "next/image";
 import { newItems } from "@/data/new-items";
 import { items51to100 } from "@/data/items-51-100";
 import { items101to150 } from "@/data/items-101-150";
+import { items151to200 } from "@/data/items-151-200";
+import { items171to200 } from "@/data/items-171-200";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
